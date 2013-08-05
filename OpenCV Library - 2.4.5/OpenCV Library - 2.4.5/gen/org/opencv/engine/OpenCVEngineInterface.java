@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/jeanclad/Desktop/SouceCode/SVN/samsung/branches/mybranch/jeanclad/Assistant_Camera/103_WORK/OpenCV Library - 2.4.5/OpenCV Library - 2.4.5/src/org/opencv/engine/OpenCVEngineInterface.aidl
+ * Original file: /Users/jjjhmw/Documents/work/Household_001/OpenCV Library - 2.4.5/OpenCV Library - 2.4.5/src/org/opencv/engine/OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**

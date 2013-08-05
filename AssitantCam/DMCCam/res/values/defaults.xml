@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Setting default data -->
+    <!-- 촬영시 저장방식 설정 -->
+    <string name="save_type" translatable="false">auto</string>
+
+    <!-- 사진구도 음성가이드 -->
+    <string name="shot_voice_guide" translatable="false">normal</string>
+    
+    <!-- 촬영모드 -->
+    <string name="shot_mode" translatable="false">normal</string>
+
+    <!-- 인물정보 음성안내 제공 -->
+    <string name="persion_voice_guide" translatable="false">on</string>
+
+    <!-- 날씨정보 음성안내 제공 -->
+    <string name="weather_voice_guide" translatable="false">on</string>
+
+    <!-- 음성제어 -->
+    <string name="voice_control" translatable="false">on</string>
+
+    <!-- 플래시 -->
+    <string name="flash_setting" translatable="false">auto</string>
+
+    <!-- 해상도 -->
+    <string name="resolution" translatable="false">3264x2448</string>
+
+    <!-- GPS 태그 -->
+    <string name="gps_tag" translatable="false">on</string>
+
+    <!-- 음량버튼을 다음으로 설정 -->
+    <string name="sound_button" translatable="false">camera</string>
+
+    <!-- 뷰파인더 안내선 표시 -->
+    <string name="view_finder" translatable="false">on</string>
+    
+    <!-- 저장소 -->
+    <string name="save_place" translatable="false">on</string>
+    
+
+</resources>

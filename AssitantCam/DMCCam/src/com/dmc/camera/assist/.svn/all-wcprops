@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist
+END
+MainActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist/MainActivity.java
+END
+Preview.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist/Preview.java
+END
+TestCameraApi.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist/TestCameraApi.java
+END
+ZoomControl.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist/ZoomControl.java
+END
+CameraSettings.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist/CameraSettings.java
+END
+FocusManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist/FocusManager.java
+END
+Util.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/samsung/!svn/ver/99/trunk/Assistant_Camera/103_WORK/AssitantCam/DMCCam/src/com/dmc/camera/assist/Util.java
+END

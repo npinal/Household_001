@@ -412,7 +412,7 @@ containing a value of this type.
 <tr><td><code>back</code></td><td>0</td><td></td></tr>
 <tr><td><code>front</code></td><td>1</td><td></td></tr>
 </table>
-          @attr name com.dmc.camera.assist:camera_id
+          @attr name android:camera_id
         */
         public static final int CameraBridgeViewBase_camera_id = 1;
         /**
@@ -426,7 +426,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.dmc.camera.assist:show_fps
+          @attr name android:show_fps
         */
         public static final int CameraBridgeViewBase_show_fps = 0;
         /** Attributes that can be used with a com_dmc_camera_widget_CheckableRealtiveLayout.
@@ -453,7 +453,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.dmc.camera.assist:checkable
+          @attr name android:checkable
         */
         public static final int com_dmc_camera_widget_CheckableRealtiveLayout_checkable = 0;
     };

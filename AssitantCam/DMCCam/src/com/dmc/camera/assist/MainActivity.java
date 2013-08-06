@@ -1,6 +1,7 @@
 package com.dmc.camera.assist;
 
 import com.dmc.camera.provider.DBApi;
+import com.dmc.camera.provider.SettingDefine;
 import com.dmc.camera.util.Utils;
 import com.dmc.camera.settings.CameraSettingDialog;
 import com.dmc.camera.widget.SingleModeDialog;
@@ -63,8 +64,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		mainLayout.addView(mPreview);
 		mainLayout.addView(buttonView);
 		setContentView(mainLayout);
-		
-//		mCameraModeView = (View) inf
 
 		ImageButton mainGalleryButton = (ImageButton) findViewById(R.id.mainGalleryButton);
 		mainGalleryButton.setOnClickListener(this);
@@ -139,6 +138,15 @@ public class MainActivity extends Activity implements OnClickListener {
 				@Override
 				public void onDismissed(int position) {
 					DBApi.TblSystem.putString(getContentResolver(), DBApi.TblSystem.SHOT_MODE, menuValue[position]);
+					
+					//---	test by hkkwon
+					String mShotMode = DBApi.TblSystem.getString(context.getContentResolver(),
+							DBApi.TblSystem.SHOT_MODE);
+					Log.e(TAG, "mShotMode = " + mShotMode);
+					
+					if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)){
+						mPreview.cameraSwitch();
+					}
 				}
 			});
 			

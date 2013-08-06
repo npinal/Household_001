@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.ShutterCallback;
@@ -20,30 +21,34 @@ import android.view.SurfaceView;
 
 import com.dmc.camera.lib.FaceDetector;
 import com.dmc.camera.lib.FaceROI;
+import com.dmc.camera.provider.DBApi;
+import com.dmc.camera.provider.SettingDefine;
+import com.dmc.camera.util.Utils;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private final static String TAG = "Preview";
 	private final String savePath = "/sdcard/DCIM/Assistant_Camera";
 	private int mCameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 
-	private CameraSettings	mCameraSettings = null;
+	private CameraSettings mCameraSettings = null;
 	private SurfaceHolder mHolder = null;
 	private Camera mCamera = null;
 	private Context mContext = null;
-	
-	//---	--	After Edittest : 아래의 값들은 추후 DB에서 읽어서 setPreviewSize에 넣어야 한다. 현재는 DB에 읽는 부분이 업
-	private int TEMP_GALAXY_S4_PREVIEW_WIDTH = 1920;	
-	private int TEMP_GALAXY_S4_PREVIEW_HEIGHT = 1080;	
-	private int	TEMP_GALAXY_NOTE_2_PREVIEW_WIDTH = 3264;
+
+	// --- -- After Edittest : 아래의 값들은 추후 DB에서 읽어서 setPreviewSize에 넣어야 한다. 현재는
+	// DB에 읽는 부분이 업
+	private int TEMP_GALAXY_S4_PREVIEW_WIDTH = 1920;
+	private int TEMP_GALAXY_S4_PREVIEW_HEIGHT = 1080;
+	private int TEMP_GALAXY_NOTE_2_PREVIEW_WIDTH = 3264;
 	private int TEMP_GALAXY_NOTE_2_PREVIEW_HEIGHT = 2448;
 
-	private FaceDetector	mFaceDetector;
-	private FocusManager	mFocusManager;
-	private ZoomControl		mZoomControl;
+	private FaceDetector mFaceDetector;
+	private FocusManager mFocusManager;
+	private ZoomControl mZoomControl;
 
-	//---	Focus Resources
+	// --- Focus Resources
 	static float oldFixScale = 1f;
-	
+
 	// --- Touch Event Resouces
 	private static final int NONE = 0;
 	private static final int TOUCH = 1;
@@ -53,18 +58,22 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private float MAXSCLAE = 7f;
 	private float MINSCAALE = 0f;
 
+	// --- DB
+	private String mShotMode;
+
 	public Preview(Context context) {
 		super(context);
 
 		init(context);
 	}
 
-	public Preview(Context context, int cameraFacing, CameraSettings cameraSettings) {
+	public Preview(Context context, int cameraFacing,
+			CameraSettings cameraSettings) {
 		super(context);
-		
+
 		mCameraFacing = cameraFacing;
 		mCameraSettings = cameraSettings;
-	
+
 		init(context);
 	}
 
@@ -83,47 +92,50 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private void init(Context context) {
 		Log.e(TAG, "init!!");
 		this.setWillNotDraw(false);
-		
+
 		int myDevice = Util.getMyDevice();
-		
+
 		if (myDevice == Util.DEVICE_GALAXY_S4)
-			Util.setPreviewSize(TEMP_GALAXY_S4_PREVIEW_WIDTH, TEMP_GALAXY_S4_PREVIEW_HEIGHT);
+			Util.setPreviewSize(TEMP_GALAXY_S4_PREVIEW_WIDTH,
+					TEMP_GALAXY_S4_PREVIEW_HEIGHT);
 		else if (myDevice == Util.DEVICE_GALAXY_NOTE2)
-			Util.setPreviewSize(TEMP_GALAXY_NOTE_2_PREVIEW_WIDTH, TEMP_GALAXY_NOTE_2_PREVIEW_HEIGHT);
+			Util.setPreviewSize(TEMP_GALAXY_NOTE_2_PREVIEW_WIDTH,
+					TEMP_GALAXY_NOTE_2_PREVIEW_HEIGHT);
 		else
-			Util.setPreviewSize(TEMP_GALAXY_S4_PREVIEW_WIDTH, TEMP_GALAXY_S4_PREVIEW_HEIGHT);
-		
+			Util.setPreviewSize(TEMP_GALAXY_S4_PREVIEW_WIDTH,
+					TEMP_GALAXY_S4_PREVIEW_HEIGHT);
+
 		mHolder = getHolder();
 		mHolder.addCallback(this);
-		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);	
-		
-		//---	투명하게  
+		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+		// --- 투명하게
 		mHolder.setFormat(PixelFormat.TRANSLUCENT);
 
 		mContext = context;
-		
+
 		mFaceDetector = new FaceDetector(context);
 		mFocusManager = new FocusManager();
 		mZoomControl = new ZoomControl();
 	}
-	
-	public void setCamera(int cameraFacing, CameraSettings cameraSettings){
+
+	public void setCamera(int cameraFacing, CameraSettings cameraSettings) {
 		mCameraFacing = cameraFacing;
 		mCameraSettings = cameraSettings;
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.e(TAG, "surfaceCreated!!");
-		
+
 		mCamera = Camera.open(mCameraFacing);
-		
-		//---	Camera Object Setting
+
+		// --- Camera Object Setting
 		Util.setCamera(mCamera);
-	
+
 		mCameraSettings.setCamera(mCamera, mHolder);
 		mFocusManager.setCamera(mCamera);
 		mZoomControl.setCamera(mCamera);
-		
+
 		try {
 			mCamera.setPreviewDisplay(holder);
 		} catch (IOException exception) {
@@ -188,7 +200,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 		});
-		
+
 		mFaceDetector.init(width, height, mCameraFacing);
 
 		mCamera.startPreview();
@@ -206,10 +218,20 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void capture() {
 		int orientation = 0;
-		if (mCamera != null)
-			
-			orientation = Util.getOrientationCompensation();
-			if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL){
+		int shotCount = 1;
+
+		mShotMode = DBApi.TblSystem.getString(mContext.getContentResolver(),
+				DBApi.TblSystem.SHOT_MODE);
+		Log.e(TAG, "mShotMode = " + mShotMode);
+
+		if (mShotMode.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {
+			shotCount = 8;
+		}
+
+		for (; shotCount > 0; shotCount--) {
+			if (mCamera != null)
+				orientation = Util.getOrientationCompensation();
+			if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL) {
 				Camera.Parameters parameters = mCamera.getParameters();
 				parameters.setRotation(90);
 				mCamera.setParameters(parameters);
@@ -218,10 +240,22 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				Camera.Parameters parameters = mCamera.getParameters();
 				parameters.setRotation(0);
 				mCamera.setParameters(parameters);
-				Log.e(TAG, "Capture Horizontal");				
+				Log.e(TAG, "Capture Horizontal");
 			}
-			
+
 			mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
+
+			if (mShotMode.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {
+				// --- Minimum burst shot time delay : 500mSec 이하로 설정되면
+				// native_capture()에서 crash 발
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	ShutterCallback shutterCallback = new ShutterCallback() {
@@ -239,25 +273,24 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		public void onPictureTaken(final byte[] data, Camera camera) {
 			mCamera.stopPreview();
 			setPreviewRestart();
-	
-			/*			
-			//---	세로사진에 대한 데이터 회전 처리
-			int orientation = Util.getOrientationCompensation();
-		
-			if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL){
-				Bitmap srcBitmap = Util.byteArrayToBitmap(data);
-				Bitmap destBitmap = Util.bitmapRotate(srcBitmap, 90);
-				destData = Util.bitmapToByteArray(destBitmap);
-			} else
-			*/
-			
+
+			/*
+			 * //--- 세로사진에 대한 데이터 회전 처리 int orientation =
+			 * Util.getOrientationCompensation();
+			 * 
+			 * if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL){
+			 * Bitmap srcBitmap = Util.byteArrayToBitmap(data); Bitmap
+			 * destBitmap = Util.bitmapRotate(srcBitmap, 90); destData =
+			 * Util.bitmapToByteArray(destBitmap); } else
+			 */
+
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					FileOutputStream outStream = null;
 					try {
 						File file = new File(savePath);
-						if (!file.isDirectory()){
+						if (!file.isDirectory()) {
 							file.mkdir();
 						}
 						// Write to SD Card
@@ -278,13 +311,23 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 					Log.d(TAG, "onPictureTaken - jpeg");
 				}
 			}).start();
-			//setPreviewRestart();		
+			// setPreviewRestart();
 		}
 	};
-	
-	private void setPreviewRestart(){
+
+	private void setPreviewRestart() {
 		mCamera.stopPreview();
 		mCamera.startPreview();
+	}
+
+	public void cameraSwitch() {
+		int width = Util.getPreviewSizeWidth();
+		int height = Util.getPreviewSizeHeigth();
+		
+		mCameraFacing = CameraInfo.CAMERA_FACING_FRONT;
+		surfaceDestroyed(mHolder);
+		surfaceCreated(mHolder);
+		surfaceChanged(mHolder, PixelFormat.TRANSLUCENT, width, height);	
 	}
 
 	@Override
@@ -293,18 +336,19 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		// wrapper to a SurfaceView that centers the camera preview instead
 		// of stretching it.
 		/*
-		final int width = resolveSize(getSuggestedMinimumWidth(),	widthMeasureSpec);
-		final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
-		
-		setMeasuredDimension(width, height);
-		Log.e(TAG, "width = " + width + "height = " + height);		
-		*/
+		 * final int width = resolveSize(getSuggestedMinimumWidth(),
+		 * widthMeasureSpec); final int height =
+		 * resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+		 * 
+		 * setMeasuredDimension(width, height); Log.e(TAG, "width = " + width +
+		 * "height = " + height);
+		 */
 		int width = Util.getPreviewSizeWidth();
 		int height = Util.getPreviewSizeHeigth();
-		
-		setMeasuredDimension(width, height);		
+
+		setMeasuredDimension(width, height);
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -319,7 +363,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				float x = event.getX();
 				float y = event.getY();
 
-				mFocusManager.touchFocus((int)x, (int)y);
+				mFocusManager.touchFocus((int) x, (int) y);
 			}
 
 			mZoomControl.initOldFixScale();
@@ -363,15 +407,11 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 		return true;
 	}
-	
+
 	/*
-	public void onDraw(Canvas canvas){
-		super.onDraw(canvas);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);;
-        paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(3);
-        canvas.drawLine(0, 110, 200, 110,paint);
-	}
-	*/
+	 * public void onDraw(Canvas canvas){ super.onDraw(canvas); Paint paint =
+	 * new Paint(Paint.ANTI_ALIAS_FLAG);; paint.setColor(Color.GREEN);
+	 * paint.setStrokeWidth(3); canvas.drawLine(0, 110, 200, 110,paint); }
+	 */
 
 }

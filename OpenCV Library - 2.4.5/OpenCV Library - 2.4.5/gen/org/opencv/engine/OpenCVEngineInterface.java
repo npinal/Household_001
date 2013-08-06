@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/jjjhmw/Documents/work/Household_001/OpenCV Library - 2.4.5/OpenCV Library - 2.4.5/src/org/opencv/engine/OpenCVEngineInterface.aidl
+ * Original file: /Users/jeanclad/Desktop/SouceCode/GIT_Npinal/Household_001/OpenCV Library - 2.4.5/OpenCV Library - 2.4.5/src/org/opencv/engine/OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**

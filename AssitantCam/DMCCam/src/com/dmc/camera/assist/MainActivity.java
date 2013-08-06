@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = this;
-
+		
 		// Hide the window title
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -112,6 +112,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		oel.enable();
 		
 	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		//---	앱 종료시 카메라 모드를 일반모드로 설정하여 앱 재 실행시 일반모드에서 시작되게 한다.
+		DBApi.TblSystem.putString(getContentResolver(), DBApi.TblSystem.SHOT_MODE, SettingDefine.SHOT_MODE_NORMAL);		
+		super.onDestroy();
+	}
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.mainShutterButton) {
@@ -142,7 +150,6 @@ public class MainActivity extends Activity implements OnClickListener {
 							DBApi.TblSystem.SHOT_MODE);
 					if (!mShotMode.matches(shotMode)){
 						mShotMode = shotMode;	
-						
 						Log.e(TAG, "mShotMode = " + mShotMode);
 						
 						//---	셀프 촬영 모드 

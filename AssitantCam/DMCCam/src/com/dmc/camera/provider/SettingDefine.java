@@ -21,9 +21,6 @@ public final class SettingDefine {
 	public static final String SHOT_MODE_SOUND_SHOT = "sound_shot";
 	public static final String SHOT_MODE_BEST_PHOTO = "best_photo";
 	public static final String SHOT_MODE_SELF_SHOT = "self_shot";
-	public static final String SHOT_MODE_FULL_SHOT = "full_shot";
-	public static final String SHOT_MODE_MEDIUM_SHOT = "medium_shot";
-	public static final String SHOT_MODE_CLOSEUP_SHOT = "closeup_shot";
 	
 	// 인물정보 음성안내 제공 
 	public static final String PERSON_VOICE_GUIDE_ON = "on";

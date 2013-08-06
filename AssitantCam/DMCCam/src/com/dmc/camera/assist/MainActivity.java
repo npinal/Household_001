@@ -128,6 +128,13 @@ public class MainActivity extends Activity implements OnClickListener {
 //			mTestCameraApi.testSetCameraFlashMode();
 			// 카메라 설정 view
 			CameraSettingDialog csd = new CameraSettingDialog(MainActivity.this);
+			csd.setOnDismissListener(new CameraSettingDialog.OnDismissListener() {
+				
+				@Override
+				public void onDismissed() {
+					
+				}
+			});
 			csd.show();
 			
 			

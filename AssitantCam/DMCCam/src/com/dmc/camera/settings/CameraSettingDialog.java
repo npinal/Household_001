@@ -2,7 +2,6 @@ package com.dmc.camera.settings;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -11,10 +10,9 @@ import android.widget.TextView;
 
 import com.dmc.camera.assist.R;
 import com.dmc.camera.provider.DBApi;
-import com.dmc.camera.provider.DBHelper;
 import com.dmc.camera.util.Utils;
 import com.dmc.camera.widget.SingleModeDialog;
-import com.dmc.camera.widget.CustomAlertDialog;;
+import com.dmc.camera.widget.CustomAlertDialog;
 
 public final class CameraSettingDialog {
 	
@@ -138,6 +136,9 @@ public final class CameraSettingDialog {
 	
 	public void dismiss(){
 		mDialog.dismiss();
+		if (mOnDismissListener != null) {
+			mOnDismissListener.onDismissed();
+		}
 	}
 	
 	
@@ -289,6 +290,16 @@ public final class CameraSettingDialog {
 		if(mWeatherVoiceGuidePosition != -1){
 			mWeatherVoiceGuideValue.setText(mWeatherVoiceGuideMenuTitle[mWeatherVoiceGuidePosition]);
 		}
+	}
+	
+	private OnDismissListener mOnDismissListener= null;
+	
+	public interface OnDismissListener{
+		public abstract void onDismissed();
+	}
+
+	public void setOnDismissListener(OnDismissListener listener) {
+		mOnDismissListener= listener;
 	}
 
 }

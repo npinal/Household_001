@@ -67,13 +67,20 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		init(context);
 	}
 
-	public Preview(Context context, int cameraFacing,
-			CameraSettings cameraSettings) {
+	public Preview(Context context,	CameraSettings cameraSettings) {
 		super(context);
 
-		mCameraFacing = cameraFacing;
 		mCameraSettings = cameraSettings;
-
+		mShotMode = DBApi.TblSystem.getString(context.getContentResolver(),
+				DBApi.TblSystem.SHOT_MODE);
+		Log.e(TAG, "mShotMode = " + mShotMode);
+	
+		if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)){
+			mCameraFacing = CameraInfo.CAMERA_FACING_FRONT;
+		} else {
+			mCameraFacing = CameraInfo.CAMERA_FACING_BACK;			
+		}
+			
 		init(context);
 	}
 
@@ -117,11 +124,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		mFaceDetector = new FaceDetector(context);
 		mFocusManager = new FocusManager();
 		mZoomControl = new ZoomControl();
-	}
-
-	public void setCamera(int cameraFacing, CameraSettings cameraSettings) {
-		mCameraFacing = cameraFacing;
-		mCameraSettings = cameraSettings;
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -320,11 +322,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		mCamera.startPreview();
 	}
 
-	public void cameraSwitch() {
+	public void cameraSwitch(int cameraInfo) {
 		int width = Util.getPreviewSizeWidth();
 		int height = Util.getPreviewSizeHeigth();
 		
-		mCameraFacing = CameraInfo.CAMERA_FACING_FRONT;
+		if (cameraInfo == mCameraFacing){
+			Log.e(TAG, "CameraInfo is same direction!");
+			return;
+		}
+		
+		mCameraFacing = cameraInfo;
 		surfaceDestroyed(mHolder);
 		surfaceCreated(mHolder);
 		surfaceChanged(mHolder, PixelFormat.TRANSLUCENT, width, height);	

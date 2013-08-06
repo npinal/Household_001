@@ -7,14 +7,11 @@ import com.dmc.camera.settings.CameraSettingDialog;
 import com.dmc.camera.widget.SingleModeDialog;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +20,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -34,8 +30,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Preview mPreview = null;
 	private CameraSettings mCameraSettings = null;
 	private TestCameraApi mTestCameraApi = null;
-	private int mCameraFacing;
 	static Context context;
+	private static String mShotMode; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +43,17 @@ public class MainActivity extends Activity implements OnClickListener {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-		mCameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 		mCameraSettings = new CameraSettings(context);
 
 		// ---test by hkkwon
 		mTestCameraApi = new TestCameraApi(mCameraSettings);
 
 		// Create our Preview view and set it as the content of our activity
-		mPreview = new Preview(context, mCameraFacing, mCameraSettings);
+		mPreview = new Preview(context, mCameraSettings);
+		
+		//	Read the Shot Mode from DB
+		mShotMode = DBApi.TblSystem.getString(context.getContentResolver(),
+				DBApi.TblSystem.SHOT_MODE);
 
 		LayoutInflater inflater = getLayoutInflater();
 		View buttonView = (View) inflater.inflate(R.layout.activity_main, null);
@@ -139,13 +138,19 @@ public class MainActivity extends Activity implements OnClickListener {
 				public void onDismissed(int position) {
 					DBApi.TblSystem.putString(getContentResolver(), DBApi.TblSystem.SHOT_MODE, menuValue[position]);
 					
-					//---	test by hkkwon
-					String mShotMode = DBApi.TblSystem.getString(context.getContentResolver(),
+					String shotMode = DBApi.TblSystem.getString(context.getContentResolver(),
 							DBApi.TblSystem.SHOT_MODE);
-					Log.e(TAG, "mShotMode = " + mShotMode);
-					
-					if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)){
-						mPreview.cameraSwitch();
+					if (!mShotMode.matches(shotMode)){
+						mShotMode = shotMode;	
+						
+						Log.e(TAG, "mShotMode = " + mShotMode);
+						
+						//---	셀프 촬영 모드 
+						if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)){
+							mPreview.cameraSwitch(CameraInfo.CAMERA_FACING_FRONT);
+						} else {
+							mPreview.cameraSwitch(CameraInfo.CAMERA_FACING_BACK);
+						}
 					}
 				}
 			});

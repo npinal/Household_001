@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_setting_list_row_back"
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:padding="10dp" >
+
+    <!-- 
+    <ImageView
+        android:id="@+android:id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:scaleType="center" 
+        android:layout_marginRight="8dp" />
+     -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toLeftOf="@+id/switch_line"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+android:id/summary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8d9ca3" />
+    </LinearLayout>
+    <!-- 
+    <View
+        android:id="@+id/switch_line"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/switchWidget"
+        android:layout_alignTop="@+id/switchWidget"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/switchWidget"
+        android:background="@drawable/custom_setting_list_row_line_back" />
+
+
+    <Switch
+        android:id="@+android:id/switchWidget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        /> -->
+        
+
+</RelativeLayout>

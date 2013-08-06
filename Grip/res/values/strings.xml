@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">환경설정2</string>
+    
+    
+    <!-- common string -->
+	<string name="action_settings">모션 및 제스처</string>
+	<string name="common_register">입력하기</string>
+	<string name="common_register_ok">입력완료</string>
+	<string name="common_register_view">입력한 그립 패턴 보기</string>
+	<string name="common_register_re">다시 입력하기</string>
+	
+	<!-- 그립터치 -->
+	<string name="setting_grip_touch_title">그립터치</string>
+	<string name="setting_grip_touch_summary">손으로 디바이스를 잡는 자세와 세기에 따라 디바이스를 제어합니다.</string>
+	
+	<!-- 락 테스트 -->
+	<string name="setting_lock_test_title">화면잠금테스트</string>
+	<string name="setting_lock_test_summary">그립으로 화면을 잠금해제를 테스트합니다.</string>
+	
+	<!-- 빠른실행 -->
+	<string name="setting_quick_run_title">빠른 실행</string>
+	<string name="setting_quick_run_summary">디바이스를 잡는 자세와 세기에 따라 잠든 화면을 깨우거나, 화면 잠금을 해제하거나, 특정 앱을 실행시킵니다.</string>
+	<string name="setting_quick_run_lock_title">Wake up+화면잠금해제</string>
+	<string name="setting_quick_run_lock_summary">등록해 놓은 Grip Pattern에 따라 잠든 화면을 깨우고 동시에 화면 잠금을 해제하여 초기 화면을 보여줍니다.</string>
+	<string name="setting_quick_run_camera_title">Wake up+카메라 실행</string>
+	<string name="setting_quick_run_camera_summary">등록해 놓은 Grip Pattern에 따라 잠든 화면을 깨우고 동시에 카메라 촬영모드로 진입합니다.</string>
+	<string name="setting_quick_run_ebook_title">Wake up+이북 실행</string>
+	<string name="setting_quick_run_ebook_summary">등록해 놓은 Grip Pattern에 따라 잠든 화면을 깨우고 동시에 최근에 읽은 이북 화면으로 진입합니다.</string>
+	
+	<!-- 한 손 네비게이션 -->
+	<string name="setting_one_hand_navi_title">한 손 내비게이션</string>
+	<string name="setting_one_hand_navi_summary">주로 한 손으로 디바이스를 제어하는 경우, 디바이스를 잡은 손의 위치와 손으로 가하는 세기에 따라 앱을 제어합니다.</string>
+	
+	<!-- 간편 미디어 편집 -->
+	<string name="setting_media_edit_title">간편 미디어 편집</string>
+	<string name="setting_media_edit_summary">한 손으로 디바이스를 쥐는 동작으로 동영상이나 음악을 간편하고 즐겁게 편집합니다.</string>
+	
+	<!-- 그립 입력 -->
+	<string name="setting_grip_register">원하는 자세로 디바이스를 손에 쥐고 화면 잠금 해제 시 사용될 그립 패턴을 입력하세요. \n\n디바이스에 닿는 손가락 위치, 손가락으로 디바이스를 쥐는 세기와 횟수, 리듬으로 원하는 그립패턴을 생성할 수 있습니다.</string>
+	<string name="setting_grip_register_quick_lock">입력된 그립 패턴으로 화면 잠금을 해제 시킬 수 있습니다.</string>
+	<string name="setting_grip_register_quick_camera">입력된 그립 패턴으로 카메라 촬영모드로 진입할 수 있습니다.</string>
+	<string name="setting_grip_register_quick_ebook">입력된 그립 패턴으로 이북 화면으로 진입할 수 있습니다.</string>
+	
+	
+</resources>

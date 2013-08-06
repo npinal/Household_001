@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Setting default data -->
+    <!-- 그립 터치 -->
+    <item type="bool" name="grip_touch" translatable="false">true</item>
+
+    <!-- 빠른 실행 -->
+    <item type="bool" name="quick_run" translatable="false">true</item>
+    
+    <!-- 빠른실행 > 화면잠금해제 -->
+    <item type="bool" name="quick_run_lock" translatable="false">true</item>
+
+    <!-- 빠른실행 > 카메라 실행 -->
+    <item type="bool" name="quick_run_camera" translatable="false">true</item>
+
+    <!-- 빠른실행 > 이북 실행  -->
+    <item type="bool" name="quick_run_ebook" translatable="false">true</item>
+
+    <!-- 한 손 네비 -->
+    <item type="bool" name="one_hand_navi" translatable="false">true</item>
+
+    <!-- 간편 미디어 편집 -->
+    <item type="bool" name="media_edit" translatable="false">true</item>
+    
+</resources>

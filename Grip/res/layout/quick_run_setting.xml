@@ -1,0 +1,180 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/setting_quick_run_lock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_setting_list_row_back"
+        android:padding="10dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@+id/quick_run_lock_switch_line"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/setting_quick_run_lock_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_quick_run_lock_title"
+                android:textColor="@drawable/custom_setting_list_title_text"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/setting_quick_run_lock_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_quick_run_lock_summary"
+                android:textColor="@drawable/custom_setting_list_summary_text" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/quick_run_lock_switch_line"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/quick_run_lock_switch"
+            android:layout_alignTop="@+id/quick_run_lock_switch"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/quick_run_lock_switch"
+            android:background="@drawable/custom_setting_list_row_line_back" />
+
+        <Switch
+            android:id="@+id/quick_run_lock_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="33dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#6e7172" />
+    
+    <RelativeLayout
+        android:id="@+id/setting_quick_run_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_setting_list_row_back"
+        android:padding="10dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@+id/quick_run_camera_switch_line"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/setting_quick_run_camera_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_quick_run_camera_title"
+                android:textColor="@drawable/custom_setting_list_title_text"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/setting_quick_run_camera_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_quick_run_camera_summary"
+                android:textColor="@drawable/custom_setting_list_summary_text" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/quick_run_camera_switch_line"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/quick_run_camera_switch"
+            android:layout_alignTop="@+id/quick_run_camera_switch"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/quick_run_camera_switch"
+            android:background="@drawable/custom_setting_list_row_line_back" />
+
+        <Switch
+            android:id="@+id/quick_run_camera_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="33dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#6e7172" />
+    
+    
+    <RelativeLayout
+        android:id="@+id/setting_quick_run_ebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_setting_list_row_back"
+        android:padding="10dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@+id/quick_run_ebook_switch_line"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/setting_quick_run_ebook_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_quick_run_ebook_title"
+                android:textColor="@drawable/custom_setting_list_title_text"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/setting_quick_run_ebook_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_quick_run_ebook_summary"
+                android:textColor="@drawable/custom_setting_list_summary_text" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/quick_run_ebook_switch_line"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/quick_run_ebook_switch"
+            android:layout_alignTop="@+id/quick_run_ebook_switch"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/quick_run_ebook_switch"
+            android:background="@drawable/custom_setting_list_row_line_back" />
+
+        <Switch
+            android:id="@+id/quick_run_ebook_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="33dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#6e7172" />
+    
+
+</LinearLayout>

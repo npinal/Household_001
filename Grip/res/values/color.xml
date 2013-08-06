@@ -1,0 +1,7 @@
+<resources>
+
+    <color name="list_back_color">#00000000</color>
+    <color name="setting_list_line_back_color">#464646</color>
+    <color name="setting_list_line_back_select">#4c7d98</color>
+
+</resources>

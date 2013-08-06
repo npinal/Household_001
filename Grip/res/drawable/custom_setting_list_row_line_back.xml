@@ -1,0 +1,7 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true" android:drawable="@color/setting_list_line_back_select"/>
+    <item android:state_selected="true" android:drawable="@color/setting_list_line_back_select"/>
+    <item android:drawable="@color/setting_list_line_back_color"/>
+
+</selector>

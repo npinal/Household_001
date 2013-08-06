@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dmc.grip"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="17" />
+
+    <permission
+        android:name="com.dmc.grip.provider.permission.READ"
+        android:protectionLevel="signature" />
+    <permission
+        android:name="com.dmc.grip.provider.permission.WRITE"
+        android:protectionLevel="signature" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.DeviceDefault" >
+        <provider
+            android:name="com.dmc.grip.provider.DBProvider"
+            android:authorities="com.dmc.grip.provider"
+            android:readPermission="com.dmc.grip.provider.permission.READ"
+            android:writePermission="com.dmc.grip.provider.permission.WRITE" />
+
+        <activity
+            android:name="com.dmc.grip.MainActivity"
+            android:label="@string/app_name" >
+            <!-- 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+             -->
+        </activity>
+        <activity
+            android:name="com.dmc.grip.setting.SettingActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.dmc.grip.setting.GripTouchSetting"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.dmc.grip.setting.QuickRunSetting"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.dmc.grip.setting.GripRegister"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.dmc.grip.setting.LockTestActivity"
+            android:label="@string/app_name" 
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
+        </activity>
+    </application>
+
+</manifest>

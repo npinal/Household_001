@@ -174,6 +174,8 @@ public class GripActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Log.e(TAG, "onResume");
+		
 		if(mRegistStartDialog.isShowing() == false){
 			mGripSensorEventManager = new GripSensorEventManager(mContext);
 		}

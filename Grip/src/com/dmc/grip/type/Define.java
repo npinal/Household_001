@@ -9,4 +9,8 @@ public class Define {
 	public static final String SETTING_QUICK_CAMERA = SETTING_SAVE_PATH + "quick_camera.txt";
 	public static final String SETTING_QUICK_EBOOK = SETTING_SAVE_PATH + "quick_ebook.txt";
 	
+	public static int MASK_BIT_HAND = 0xC0;
+	public static int MAKS_BIT_POWER = 0x20;
+
+	
 }

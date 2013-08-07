@@ -1,13 +1,12 @@
 package com.dmc.grip.sensor;
 
-import com.dmc.grip.R;
+import com.dmc.grip.data.GripSensorDataApi;
 
 import android.content.Context;
 import android.hardware.contextaware.ContextAwareConstants;
 import android.hardware.contextaware.ContextAwareManager;
 import android.hardware.contextaware.manager.ContextAwareListener;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -15,9 +14,14 @@ import android.util.Log;
 public class GripSensorEventManager {
 	private ContextAwareManager mContextAwareManager;
 	public static final String TAG = "GripSensorEventManager";
+	private GripSensorDataApi mGripSensorDataApi;
+	private boolean isStop = false;
+	private int[] mGripData;
 
 	public GripSensorEventManager(Context context) {
 		// TODO Auto-generated constructor stub
+
+		mGripSensorDataApi = new GripSensorDataApi();
 
 		mContextAwareManager = (ContextAwareManager) context
 				.getSystemService("context_aware");
@@ -30,9 +34,10 @@ public class GripSensorEventManager {
 		mContextAwareManager.registerListener(mCAListener,
 				ContextAwareManager.GRIP_SENSOR_SERVICE);
 
+		//---	test by hkkwon
 		collectSensorDataHandler.sendEmptyMessage(1000);
 	}
-	
+
 	private ContextAwareListener mCAListener = new ContextAwareListener() {
 
 		@Override
@@ -40,7 +45,7 @@ public class GripSensorEventManager {
 			if (type == ContextAwareManager.GRIP_SENSOR_SERVICE) {
 				// TODO : receive the context
 
-				final int[] grip = context.getIntArray("Grip");
+				mGripData = context.getIntArray("Grip");
 
 				/*
 				 * int i = 0; for (i = 0; i < 30; i++) { Log.e(TAG, "grip [" + i
@@ -52,24 +57,30 @@ public class GripSensorEventManager {
 				 * //str.append(Integer.toString(i) + ", ");
 				 * printBit(grip[count]); count++; }
 				 */
-				
+
 				/*
 				Log.e(TAG, "START");
-				printBit(grip[0]);
-				printBit(grip[1]);
-				printBit(grip[2]);
-				printBit(grip[3]);
-				printBit(grip[4]);
+				printBit(mGripData[0]);
+				printBit(mGripData[1]);
+				printBit(mGripData[2]);
+				printBit(mGripData[3]);
+				printBit(mGripData[4]);
 				Log.e(TAG, "END");
 				*/
+
 			}
 		}
 	};
 
 	private Handler collectSensorDataHandler = new Handler() {
 		public void handleMessage(Message msg) {
-			collectSensorDataHandler.sendEmptyMessageDelayed(msg.what + 1, 500);
-			Log.e(TAG, "what = " + msg.what);
+			if (!isStop) {
+				mGripSensorDataApi.parseSensorData(mGripData);
+				collectSensorDataHandler.sendEmptyMessageDelayed(msg.what + 1,
+						500);
+				Log.e(TAG, "what = " + msg.what);
+			} else
+				return;
 		}
 	};
 
@@ -79,25 +90,9 @@ public class GripSensorEventManager {
 					ContextAwareManager.GRIP_SENSOR_SERVICE);
 		}
 	}
-	
-	public void removeCollectSensorDataHandler(){
+
+	public void removeCollectSensorDataHandler() {
 		collectSensorDataHandler.removeMessages(0);
+		isStop = true;
 	}
-
-	private void printBit(int value) {
-		String binaryString = Integer.toBinaryString(value);
-		while (binaryString.length() % 4 != 0) {
-			binaryString = "0" + binaryString;
-		}
-
-		Log.e(TAG,
-				"Source : " + binaryString + "(ox" + Integer.toHexString(value)
-						+ ")");
-
-		/*
-		 * for (int i = 0; i < binaryString.length(); i++) { Log.e(TAG, "\tbit "
-		 * + i + " : " + ((value >> i & 1) == 1)); }
-		 */
-	}
-
 }

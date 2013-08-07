@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -34,7 +34,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dmc.grip.R;
-import com.dmc.grip.provider.DBApi;
 import com.dmc.grip.sensor.GripSensorEventManager;
 import com.dmc.grip.type.Define;
 import com.dmc.grip.utils.FileUtils;
@@ -71,6 +70,11 @@ public class GripActivity extends Activity {
 	
 	GripSensorEventManager mGripSensorEventManager;
 	Context mContext;
+	
+	String mPatternString = "";
+	String mSavePath;
+	
+	int mQuickRunType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +141,33 @@ public class GripActivity extends Activity {
 		ivList.add((ImageView) findViewById(R.id.iv28));
 		ivList.add((ImageView) findViewById(R.id.iv29));
 		ivList.add((ImageView) findViewById(R.id.iv30));
+		
+		Intent intent = getIntent();
+		
+		mQuickRunType = intent.getIntExtra(QuickRunSetting.QUICK_TYPE, QuickRunSetting.QUICK_RUN_LOCK);
+		if(mQuickRunType == QuickRunSetting.QUICK_RUN_LOCK){
+			mSavePath = Define.SETTING_QUICK_LOCK;
+		}
+		else if(mQuickRunType == QuickRunSetting.QUICK_RUN_CAMERA){
+			mSavePath = Define.SETTING_QUICK_CAMERA;
+		}
+		else {
+			mSavePath = Define.SETTING_QUICK_EBOOK;
+		}
+		
+		/* test code
+		int value[] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9};
+		int power = Define.POWER_FULL;
+		int hand = Define.HAND_LEFT;
+		accruePattern(value, power, hand);
+		accruePattern(value, power, hand);
+		
+		Boolean result = fileSave();
+		
+		Log.d("Jihye", "fileSave result : " + result);
+		*/
+		
+		dialogHandler.sendEmptyMessage(0);
 
 		/*
 		try {
@@ -153,10 +184,6 @@ public class GripActivity extends Activity {
 				gripValue[i][j] = Integer.parseInt(value[j], 16);
 			}
 		}*/
-		
-		FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
-		
-		dialogHandler.sendEmptyMessage(0);
 		
 //		handler.sendEmptyMessageDelayed(0, 0);
 	}
@@ -208,6 +235,34 @@ public class GripActivity extends Activity {
 			Log.e(TAG, "csv read error : " + e);
 		}
 
+	}
+	
+	private Boolean fileSave(){
+		FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
+		
+		File file = new File(mSavePath);
+		Log.d("Jihye", "mSavePath : " + mSavePath);
+		FileUtils.deleteFile(file);
+		
+		return FileUtils.writeFile(file, mPatternString.getBytes());
+	}
+	
+	private void accruePattern(int value[], int power, int hand){
+		String accrue = "";
+		for(int i=0; i < value.length; i++){
+			accrue = accrue + value[i];
+			if(i != value.length -1){
+				accrue = accrue + ",";
+			}
+		}
+		accrue = accrue + "|";
+		accrue = accrue + power;
+		accrue = accrue + "|";
+		accrue = accrue + hand;
+		accrue = accrue + "\n";
+		mPatternString = mPatternString + accrue;
+		
+		Log.d("Jihye", "mPatternString : " + mPatternString);
 	}
 
 	public void drawBitmap(final ImageView iv, int value, int type) {
@@ -366,13 +421,13 @@ public class GripActivity extends Activity {
 					int type = 0;
 	
 					if (positionXX < 10) {
-						type = LEFT;
-					} else if (positionXX < 14) {
-						type = BOTTOM;
-					} else if (positionXX < 25) {
 						type = RIGHT;
-					} else if (positionXX < 30) {
+					} else if (positionXX < 14) {
 						type = TOP;
+					} else if (positionXX < 25) {
+						type = LEFT;
+					} else if (positionXX < 30) {
+						type = BOTTOM;
 					}
 	
 					drawBitmap(ivList.get(positionXX), value, type);

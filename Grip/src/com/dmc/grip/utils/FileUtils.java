@@ -158,8 +158,12 @@ public class FileUtils {
     public static final boolean writeFile(File file , byte[] file_content){
         boolean result;
         FileOutputStream fos;
-        if(file!=null&&file.exists()&&file_content!=null){
+        
+        if(file!=null&&file_content!=null){
             try {
+            	if(!file.exists()){
+            		file.createNewFile();
+            	}
                 fos = new FileOutputStream(file);
                 try {
                     fos.write(file_content);
@@ -170,7 +174,9 @@ public class FileUtils {
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
+            } catch (IOException e) {
+				e.printStackTrace();
+			}
             result = true;
         }else{
             result = false;

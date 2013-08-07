@@ -103,14 +103,17 @@ public class GripRegister extends Activity {
 			
 			if(v.getId() == R.id.btn_grip_regist){
 				Intent intent = new Intent(GripRegister.this, GripActivity.class);
+				intent.putExtra(QuickRunSetting.QUICK_TYPE, mQuickRunType);
 				startActivity(intent);
 			}
 			else if(v.getId() == R.id.btn_grip_view){
 				Intent intent = new Intent(GripRegister.this, GripActivity.class);
+				intent.putExtra(QuickRunSetting.QUICK_TYPE, mQuickRunType);
 				startActivity(intent);
 			}
 			else if(v.getId() == R.id.btn_grip_re_regist){
 				Intent intent = new Intent(GripRegister.this, GripActivity.class);
+				intent.putExtra(QuickRunSetting.QUICK_TYPE, mQuickRunType);
 				startActivity(intent);
 			}
 		}

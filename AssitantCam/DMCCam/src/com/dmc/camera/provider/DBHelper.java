@@ -28,6 +28,27 @@ public class DBHelper extends SQLiteOpenHelper {
                 ");");
     }
 	
+	private void createGalleryTable(SQLiteDatabase db) {
+    	db.execSQL("CREATE TABLE gallery (" +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "path TEXT NOT NULL," +
+                "filename TEXT NOT NULL," +
+                "memo TEXT NOT NULL," +
+                "category INTEGER NOT NULL," +
+                "sound TEXT," +
+                "recording TEXT," +
+                "weather TEXT," +
+                "gps TEXT" +
+                ");");
+    }
+	
+	private void createCategoryTable(SQLiteDatabase db) {
+    	db.execSQL("CREATE TABLE category (" +
+                "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "name TEXT NOT NULL" +
+                ");");
+    }
+	
 	public void loadSystemSettings(SQLiteDatabase db){
     	SQLiteStatement stmt = null;
     	try {
@@ -87,6 +108,8 @@ public class DBHelper extends SQLiteOpenHelper {
 		
 		createSystemTable(db);
 		loadSystemSettings(db);
+		createGalleryTable(db);
+		createCategoryTable(db);
 		
 	}
 

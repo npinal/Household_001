@@ -19,5 +19,6 @@ public class Define {
 	public static final int HAND_IMPOSSIBLE = 01;
 	
 	public static final String FILE_SEPARATOR = "-";
-	
+	public static int MASK_BIT_HAND = 0xC0;
+	public static int MAKS_BIT_POWER = 0x20;
 }

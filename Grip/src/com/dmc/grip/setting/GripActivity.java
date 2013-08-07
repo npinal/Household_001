@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 
 import com.dmc.grip.R;
 import com.dmc.grip.provider.DBApi;
+import com.dmc.grip.sensor.GripSensorEventManager;
 
 public class GripActivity extends Activity {
 	private static final String TAG = "MainActivity";
@@ -64,11 +66,16 @@ public class GripActivity extends Activity {
 	AlertDialog mRegistStartDialog;
 	AlertDialog mRegistOkDialog;
 	Button mRegistOk;
+	
+	GripSensorEventManager mGripSensorEventManager;
+	Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		mContext = this;
+		
 		setContentView(R.layout.activity_main);
 		
 		mRegistStartDialog = new AlertDialog.Builder(GripActivity.this).create();
@@ -153,7 +160,8 @@ public class GripActivity extends Activity {
 		super.onPause();
 		Log.e(TAG, "onPause");
 		
-		handler.removeMessages(0);		
+		handler.removeMessages(0);
+		mGripSensorEventManager.unregisterCAListener();
 	}
 
 	private void csvRead() throws IOException {
@@ -322,6 +330,9 @@ public class GripActivity extends Activity {
 			else{
 				mRegistStartDialog.dismiss();
 				handler.sendEmptyMessageDelayed(0, 0);
+				
+				//---	Start GripSensorEventManager
+				mGripSensorEventManager = new GripSensorEventManager(mContext);
 			}
 			
 		}

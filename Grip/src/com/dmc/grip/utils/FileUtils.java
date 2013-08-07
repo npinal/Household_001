@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.R.bool;
 import android.util.Log;
 
 public class FileUtils {
@@ -234,4 +235,5 @@ public class FileUtils {
         }
         return result;
     }
+    
 }

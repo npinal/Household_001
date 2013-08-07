@@ -56,7 +56,7 @@ public class GripActivity extends Activity {
 	public static final int RIGHT = 1;
 	public static final int TOP = 2;
 	public static final int BOTTOM = 3;
-
+	
 	public int positionX = 0;
 	public int positionXX = 0;
 
@@ -155,7 +155,8 @@ public class GripActivity extends Activity {
 			mSavePath = Define.SETTING_QUICK_EBOOK;
 		}
 		
-		/* test code
+//		 test code
+		/*
 		int value[] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9};
 		int power = Define.POWER_FULL;
 		int hand = Define.HAND_LEFT;
@@ -165,7 +166,8 @@ public class GripActivity extends Activity {
 		Boolean result = fileSave();
 		
 		Log.d("Jihye", "fileSave result : " + result);
-		*/
+		
+		fileParse(mSavePath);*/
 		
 		dialogHandler.sendEmptyMessage(0);
 
@@ -255,15 +257,52 @@ public class GripActivity extends Activity {
 				accrue = accrue + ",";
 			}
 		}
-		accrue = accrue + "|";
+		accrue = accrue + Define.FILE_SEPARATOR;
 		accrue = accrue + power;
-		accrue = accrue + "|";
+		accrue = accrue + Define.FILE_SEPARATOR;
 		accrue = accrue + hand;
 		accrue = accrue + "\n";
 		mPatternString = mPatternString + accrue;
 		
 		Log.d("Jihye", "mPatternString : " + mPatternString);
 	}
+	
+	
+	private void fileParse(String path){
+		File file = new File(path);
+        if(file!=null&&file.exists()){
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                BufferedReader br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+                String line = null;
+    			while ((line = br.readLine()) != null) {
+    				StringBuilder sb = new StringBuilder();
+    				sb.append(line);
+    				Log.d("Jihye", "fileParse " + sb.toString());
+    				String[] parse = sb.toString().split(Define.FILE_SEPARATOR);
+    				
+    				String valueString[] = parse[0].split(",");
+    				int value[] = new int[valueString.length];
+    				for(int i=0; i < valueString.length; i++){
+    					value[i] = Integer.parseInt(valueString[i]);
+//    					Log.d("Jihye", "value[i] " + value[i]);
+    				}
+    				
+    				int power = Integer.parseInt(parse[1]);
+    				int hand = Integer.parseInt(parse[2]);
+    				
+//    				Log.d("Jihye", "power : " + power + ", hand : " + hand);
+    				
+//    				for(int i=0; i < parse.length; i++){
+//    					Log.d("Jihye", "fileParse '" + Define.FILE_SEPARATOR + "' " + parse[i]);
+//    				}
+    			}
+                fis.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 	public void drawBitmap(final ImageView iv, int value, int type) {
 

@@ -13,7 +13,11 @@ public class Define {
 	public static final int POWER_MIDDLE = 1;
 	public static final int POWER_FULL = 2;
 	
-	public static final int HAND_RIGHT = 1;
-	public static final int HAND_LEFT = 2;
+	public static final int HAND_RIGHT = 11;
+	public static final int HAND_LEFT = 10;
+	public static final int HAND_NO = 00;
+	public static final int HAND_IMPOSSIBLE = 01;
+	
+	public static final String FILE_SEPARATOR = "-";
 	
 }

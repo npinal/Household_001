@@ -5,5 +5,26 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     
     <dimen name="actionbar_switch_right_margin">10dp</dimen>
+    
+        <!-- 1mm = 18.305079 px ..   -->
+    <dimen name="graph_portrait_height">540px</dimen>
+    <dimen name="graph_portrait_width">128.135553px</dimen>
+    <dimen name="graph_land_height">128.135553px</dimen>
+    <dimen name="graph_land_width">540px</dimen>
+    
+    <dimen name="graph_space_margin_2">36.610158px</dimen>
+    <dimen name="graph_space_margin_1">18.305079px</dimen>
+    
+    <dimen name="sound_key_margin">329.491422px</dimen>
+    <dimen name="power_key_margin">164.745711px</dimen>
+    <dimen name="bottom_margin">530.847291px</dimen>
+    <dimen name="top_margin">384.406659px</dimen>
+    <!-- 
+    <color name="graph_background">#20000000</color>
+    <color name="background_left">#10FF0000</color>
+     -->
+    <color name="graph_background">#3000FF00</color><!-- 3000FF00 -->
+    <color name="background_left">#00000000</color>
+    <color name="background_right">#00000000</color><!-- #1000FF00 -->
 
 </resources>

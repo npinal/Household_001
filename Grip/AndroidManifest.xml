@@ -63,6 +63,12 @@
             android:label="@string/app_name" 
             android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
         </activity>
+        
+        <activity
+            android:name="com.dmc.grip.setting.GripActivity"
+            android:label="@string/app_name" 
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
+        </activity>
     </application>
 
 </manifest>

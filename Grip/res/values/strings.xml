@@ -10,6 +10,7 @@
 	<string name="common_register_ok">입력완료</string>
 	<string name="common_register_view">입력한 그립 패턴 보기</string>
 	<string name="common_register_re">다시 입력하기</string>
+	<string name="common_ok">확인</string>
 	
 	<!-- 그립터치 -->
 	<string name="setting_grip_touch_title">그립터치</string>
@@ -42,6 +43,9 @@
 	<string name="setting_grip_register_quick_lock">입력된 그립 패턴으로 화면 잠금을 해제 시킬 수 있습니다.</string>
 	<string name="setting_grip_register_quick_camera">입력된 그립 패턴으로 카메라 촬영모드로 진입할 수 있습니다.</string>
 	<string name="setting_grip_register_quick_ebook">입력된 그립 패턴으로 이북 화면으로 진입할 수 있습니다.</string>
+	
+	<string name="setting_grip_register_message">원하는 자세로 디바이스를 손에 쥐었나요? 지금부터 그립 패턴 입력이 시작됩니다.\n\n</string>
+	<string name="setting_grip_register_ok">그립 패턴 입력이 완료되었습니다. 그립 패턴이 다음과 같이 생성되었습니다.</string>
 	
 	
 </resources>

@@ -100,24 +100,19 @@ public class GripRegister extends Activity {
 
 		@Override
 		public void onClick(View v) {
-
-			switch (v.getId()) {
-			case R.id.btn_grip_regist:
-//				Intent intent = new Intent(GripRegister.this, QuickRunSetting.class);
-//				startActivity(intent);
-				
-				break;
-			case R.id.btn_grip_view:
-
-				break;
-			case R.id.btn_grip_re_regist:
-
-				break;
-
-			default:
-				break;
+			
+			if(v.getId() == R.id.btn_grip_regist){
+				Intent intent = new Intent(GripRegister.this, GripActivity.class);
+				startActivity(intent);
 			}
-
+			else if(v.getId() == R.id.btn_grip_view){
+				Intent intent = new Intent(GripRegister.this, GripActivity.class);
+				startActivity(intent);
+			}
+			else if(v.getId() == R.id.btn_grip_re_regist){
+				Intent intent = new Intent(GripRegister.this, GripActivity.class);
+				startActivity(intent);
+			}
 		}
 	};
 	

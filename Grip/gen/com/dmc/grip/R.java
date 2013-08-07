@@ -35,6 +35,16 @@ public final class R {
         public static final int quick_run_lock=0x7f050002;
     }
     public static final class color {
+        /**  3000FF00 
+         */
+        public static final int background_left=0x7f040004;
+        public static final int background_right=0x7f040005;
+        /**  
+    <color name="graph_background">#20000000</color>
+    <color name="background_left">#10FF0000</color>
+     
+         */
+        public static final int graph_background=0x7f040003;
         public static final int list_back_color=0x7f040000;
         public static final int setting_list_line_back_color=0x7f040001;
         public static final int setting_list_line_back_select=0x7f040002;
@@ -49,6 +59,18 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f060000;
         public static final int activity_vertical_margin=0x7f060001;
+        public static final int bottom_margin=0x7f06000b;
+        public static final int graph_land_height=0x7f060005;
+        public static final int graph_land_width=0x7f060006;
+        /**  1mm = 18.305079 px ..   
+         */
+        public static final int graph_portrait_height=0x7f060003;
+        public static final int graph_portrait_width=0x7f060004;
+        public static final int graph_space_margin_1=0x7f060008;
+        public static final int graph_space_margin_2=0x7f060007;
+        public static final int power_key_margin=0x7f06000a;
+        public static final int sound_key_margin=0x7f060009;
+        public static final int top_margin=0x7f06000c;
     }
     public static final class drawable {
         public static final int custom_setting_list_row_back=0x7f020000;
@@ -61,50 +83,83 @@ public final class R {
         public static final int title_divide=0x7f020007;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a002b;
-        public static final int btn_grip_re_regist=0x7f0a0007;
-        public static final int btn_grip_regist=0x7f0a0003;
-        public static final int btn_grip_view=0x7f0a0006;
-        public static final int grip_regist_first=0x7f0a0002;
-        public static final int grip_regist_message=0x7f0a0005;
-        public static final int grip_regist_more=0x7f0a0004;
-        public static final int grip_switch=0x7f0a0029;
-        public static final int grip_switch_line=0x7f0a0028;
-        public static final int media_edit_switch=0x7f0a0016;
-        public static final int media_edit_switch_line=0x7f0a0013;
-        public static final int one_hand_navi_switch=0x7f0a0011;
-        public static final int one_hand_navi_switch_line=0x7f0a000e;
-        public static final int quick_run_camera_switch=0x7f0a0021;
-        public static final int quick_run_camera_switch_line=0x7f0a001e;
-        public static final int quick_run_ebook_switch=0x7f0a0026;
-        public static final int quick_run_ebook_switch_line=0x7f0a0023;
-        public static final int quick_run_lock_switch=0x7f0a001c;
-        public static final int quick_run_lock_switch_line=0x7f0a0019;
-        public static final int quick_run_switch=0x7f0a000c;
-        public static final int quick_run_switch_line=0x7f0a0009;
-        public static final int setting_grip_touch=0x7f0a0027;
-        public static final int setting_lock_test=0x7f0a002a;
-        public static final int setting_media_edit=0x7f0a0012;
-        public static final int setting_media_edit_summary=0x7f0a0015;
-        public static final int setting_media_edit_title=0x7f0a0014;
-        public static final int setting_one_hand_navi=0x7f0a000d;
-        public static final int setting_one_hand_navi_summary=0x7f0a0010;
-        public static final int setting_one_hand_navi_title=0x7f0a000f;
-        public static final int setting_quick_run=0x7f0a0008;
-        public static final int setting_quick_run_camera=0x7f0a001d;
-        public static final int setting_quick_run_camera_summary=0x7f0a0020;
-        public static final int setting_quick_run_camera_title=0x7f0a001f;
-        public static final int setting_quick_run_ebook=0x7f0a0022;
-        public static final int setting_quick_run_ebook_summary=0x7f0a0025;
-        public static final int setting_quick_run_ebook_title=0x7f0a0024;
-        public static final int setting_quick_run_lock=0x7f0a0018;
-        public static final int setting_quick_run_lock_summary=0x7f0a001b;
-        public static final int setting_quick_run_lock_title=0x7f0a001a;
-        public static final int setting_quick_run_summary=0x7f0a000b;
-        public static final int setting_quick_run_title=0x7f0a000a;
-        public static final int switch1=0x7f0a0000;
-        public static final int switch_line=0x7f0a0017;
-        public static final int textView1=0x7f0a0001;
+        public static final int action_settings=0x7f0a004c;
+        public static final int btn_grip_re_regist=0x7f0a0028;
+        public static final int btn_grip_regist=0x7f0a0024;
+        public static final int btn_grip_view=0x7f0a0027;
+        public static final int grip_regist_first=0x7f0a0023;
+        public static final int grip_regist_message=0x7f0a0026;
+        public static final int grip_regist_more=0x7f0a0025;
+        public static final int grip_regist_ok=0x7f0a0022;
+        public static final int grip_switch=0x7f0a004a;
+        public static final int grip_switch_line=0x7f0a0049;
+        public static final int height_bottom_layout=0x7f0a001d;
+        public static final int height_top_layout=0x7f0a0017;
+        public static final int iv1=0x7f0a0001;
+        public static final int iv10=0x7f0a000a;
+        public static final int iv11=0x7f0a001e;
+        public static final int iv12=0x7f0a001f;
+        public static final int iv13=0x7f0a0020;
+        public static final int iv14=0x7f0a0021;
+        public static final int iv15=0x7f0a0016;
+        public static final int iv16=0x7f0a0015;
+        public static final int iv17=0x7f0a0014;
+        public static final int iv18=0x7f0a0013;
+        public static final int iv19=0x7f0a0012;
+        public static final int iv2=0x7f0a0002;
+        public static final int iv20=0x7f0a0011;
+        public static final int iv21=0x7f0a0010;
+        public static final int iv22=0x7f0a000f;
+        public static final int iv23=0x7f0a000e;
+        public static final int iv24=0x7f0a000d;
+        public static final int iv25=0x7f0a000c;
+        public static final int iv26=0x7f0a001c;
+        public static final int iv27=0x7f0a001b;
+        public static final int iv28=0x7f0a001a;
+        public static final int iv29=0x7f0a0019;
+        public static final int iv3=0x7f0a0003;
+        public static final int iv30=0x7f0a0018;
+        public static final int iv4=0x7f0a0004;
+        public static final int iv5=0x7f0a0005;
+        public static final int iv6=0x7f0a0006;
+        public static final int iv7=0x7f0a0007;
+        public static final int iv8=0x7f0a0008;
+        public static final int iv9=0x7f0a0009;
+        public static final int media_edit_switch=0x7f0a0037;
+        public static final int media_edit_switch_line=0x7f0a0034;
+        public static final int one_hand_navi_switch=0x7f0a0032;
+        public static final int one_hand_navi_switch_line=0x7f0a002f;
+        public static final int quick_run_camera_switch=0x7f0a0042;
+        public static final int quick_run_camera_switch_line=0x7f0a003f;
+        public static final int quick_run_ebook_switch=0x7f0a0047;
+        public static final int quick_run_ebook_switch_line=0x7f0a0044;
+        public static final int quick_run_lock_switch=0x7f0a003d;
+        public static final int quick_run_lock_switch_line=0x7f0a003a;
+        public static final int quick_run_switch=0x7f0a002d;
+        public static final int quick_run_switch_line=0x7f0a002a;
+        public static final int setting_grip_touch=0x7f0a0048;
+        public static final int setting_lock_test=0x7f0a004b;
+        public static final int setting_media_edit=0x7f0a0033;
+        public static final int setting_media_edit_summary=0x7f0a0036;
+        public static final int setting_media_edit_title=0x7f0a0035;
+        public static final int setting_one_hand_navi=0x7f0a002e;
+        public static final int setting_one_hand_navi_summary=0x7f0a0031;
+        public static final int setting_one_hand_navi_title=0x7f0a0030;
+        public static final int setting_quick_run=0x7f0a0029;
+        public static final int setting_quick_run_camera=0x7f0a003e;
+        public static final int setting_quick_run_camera_summary=0x7f0a0041;
+        public static final int setting_quick_run_camera_title=0x7f0a0040;
+        public static final int setting_quick_run_ebook=0x7f0a0043;
+        public static final int setting_quick_run_ebook_summary=0x7f0a0046;
+        public static final int setting_quick_run_ebook_title=0x7f0a0045;
+        public static final int setting_quick_run_lock=0x7f0a0039;
+        public static final int setting_quick_run_lock_summary=0x7f0a003c;
+        public static final int setting_quick_run_lock_title=0x7f0a003b;
+        public static final int setting_quick_run_summary=0x7f0a002c;
+        public static final int setting_quick_run_title=0x7f0a002b;
+        public static final int switch_line=0x7f0a0038;
+        public static final int width_left_layout=0x7f0a0000;
+        public static final int width_right_layout=0x7f0a000b;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -123,42 +178,45 @@ public final class R {
          */
         public static final int action_settings=0x7f070001;
         public static final int app_name=0x7f070000;
+        public static final int common_ok=0x7f070006;
         public static final int common_register=0x7f070002;
         public static final int common_register_ok=0x7f070003;
         public static final int common_register_re=0x7f070005;
         public static final int common_register_view=0x7f070004;
         /**  그립 입력 
          */
-        public static final int setting_grip_register=0x7f070016;
-        public static final int setting_grip_register_quick_camera=0x7f070018;
-        public static final int setting_grip_register_quick_ebook=0x7f070019;
-        public static final int setting_grip_register_quick_lock=0x7f070017;
-        public static final int setting_grip_touch_summary=0x7f070007;
+        public static final int setting_grip_register=0x7f070017;
+        public static final int setting_grip_register_message=0x7f07001b;
+        public static final int setting_grip_register_ok=0x7f07001c;
+        public static final int setting_grip_register_quick_camera=0x7f070019;
+        public static final int setting_grip_register_quick_ebook=0x7f07001a;
+        public static final int setting_grip_register_quick_lock=0x7f070018;
+        public static final int setting_grip_touch_summary=0x7f070008;
         /**  그립터치 
          */
-        public static final int setting_grip_touch_title=0x7f070006;
-        public static final int setting_lock_test_summary=0x7f070009;
+        public static final int setting_grip_touch_title=0x7f070007;
+        public static final int setting_lock_test_summary=0x7f07000a;
         /**  락 테스트 
          */
-        public static final int setting_lock_test_title=0x7f070008;
-        public static final int setting_media_edit_summary=0x7f070015;
+        public static final int setting_lock_test_title=0x7f070009;
+        public static final int setting_media_edit_summary=0x7f070016;
         /**  간편 미디어 편집 
          */
-        public static final int setting_media_edit_title=0x7f070014;
-        public static final int setting_one_hand_navi_summary=0x7f070013;
+        public static final int setting_media_edit_title=0x7f070015;
+        public static final int setting_one_hand_navi_summary=0x7f070014;
         /**  한 손 네비게이션 
          */
-        public static final int setting_one_hand_navi_title=0x7f070012;
-        public static final int setting_quick_run_camera_summary=0x7f07000f;
-        public static final int setting_quick_run_camera_title=0x7f07000e;
-        public static final int setting_quick_run_ebook_summary=0x7f070011;
-        public static final int setting_quick_run_ebook_title=0x7f070010;
-        public static final int setting_quick_run_lock_summary=0x7f07000d;
-        public static final int setting_quick_run_lock_title=0x7f07000c;
-        public static final int setting_quick_run_summary=0x7f07000b;
+        public static final int setting_one_hand_navi_title=0x7f070013;
+        public static final int setting_quick_run_camera_summary=0x7f070010;
+        public static final int setting_quick_run_camera_title=0x7f07000f;
+        public static final int setting_quick_run_ebook_summary=0x7f070012;
+        public static final int setting_quick_run_ebook_title=0x7f070011;
+        public static final int setting_quick_run_lock_summary=0x7f07000e;
+        public static final int setting_quick_run_lock_title=0x7f07000d;
+        public static final int setting_quick_run_summary=0x7f07000c;
         /**  빠른실행 
          */
-        public static final int setting_quick_run_title=0x7f07000a;
+        public static final int setting_quick_run_title=0x7f07000b;
     }
     public static final class style {
         /** 

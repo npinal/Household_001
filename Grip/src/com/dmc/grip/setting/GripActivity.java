@@ -166,6 +166,8 @@ public class GripActivity extends Activity {
 		Log.e(TAG, "onPause");
 		
 		handler.removeMessages(0);
+		
+		mGripSensorEventManager.removeCollectSensorDataHandler();
 		mGripSensorEventManager.unregisterCAListener();
 	}
 	

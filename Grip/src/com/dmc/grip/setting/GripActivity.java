@@ -36,6 +36,8 @@ import android.widget.Toast;
 import com.dmc.grip.R;
 import com.dmc.grip.provider.DBApi;
 import com.dmc.grip.sensor.GripSensorEventManager;
+import com.dmc.grip.type.Define;
+import com.dmc.grip.utils.FileUtils;
 
 public class GripActivity extends Activity {
 	private static final String TAG = "MainActivity";
@@ -136,6 +138,7 @@ public class GripActivity extends Activity {
 		ivList.add((ImageView) findViewById(R.id.iv29));
 		ivList.add((ImageView) findViewById(R.id.iv30));
 
+		/*
 		try {
 			csvRead();
 		} catch (IOException e) {
@@ -149,7 +152,9 @@ public class GripActivity extends Activity {
 			for (int j = 0; j < ivList.size(); j++) {
 				gripValue[i][j] = Integer.parseInt(value[j], 16);
 			}
-		}
+		}*/
+		
+		FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
 		
 		dialogHandler.sendEmptyMessage(0);
 		
@@ -162,6 +167,14 @@ public class GripActivity extends Activity {
 		
 		handler.removeMessages(0);
 		mGripSensorEventManager.unregisterCAListener();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(mRegistStartDialog.isShowing() == false){
+			mGripSensorEventManager = new GripSensorEventManager(mContext);
+		}
 	}
 
 	private void csvRead() throws IOException {

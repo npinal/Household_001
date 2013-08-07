@@ -17,14 +17,14 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:id="@+id/iv1"
+                android:id="@+id/iv17"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:background="@color/graph_background"
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv2"
+                android:id="@+id/iv18"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/sound_key_margin"
@@ -32,7 +32,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv3"
+                android:id="@+id/iv19"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -40,7 +40,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv4"
+                android:id="@+id/iv20"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -48,7 +48,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv5"
+                android:id="@+id/iv21"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -56,7 +56,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv6"
+                android:id="@+id/iv22"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -64,7 +64,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv7"
+                android:id="@+id/iv23"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -72,7 +72,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv8"
+                android:id="@+id/iv24"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -80,7 +80,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv9"
+                android:id="@+id/iv25"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -88,7 +88,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv10"
+                android:id="@+id/iv26"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -105,14 +105,14 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:id="@+id/iv25"
+                android:id="@+id/iv11"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:background="@color/graph_background"
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv24"
+                android:id="@+id/iv10"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -120,7 +120,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv23"
+                android:id="@+id/iv9"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/power_key_margin"
@@ -128,7 +128,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv22"
+                android:id="@+id/iv8"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -136,7 +136,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv21"
+                android:id="@+id/iv7"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -144,7 +144,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv20"
+                android:id="@+id/iv6"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -152,7 +152,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv19"
+                android:id="@+id/iv5"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -160,7 +160,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv18"
+                android:id="@+id/iv4"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -168,7 +168,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv17"
+                android:id="@+id/iv3"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -176,7 +176,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv16"
+                android:id="@+id/iv2"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -184,7 +184,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv15"
+                android:id="@+id/iv1"
                 android:layout_width="@dimen/graph_land_width"
                 android:layout_height="@dimen/graph_land_height"
                 android:layout_marginTop="@dimen/graph_space_margin_2"
@@ -205,14 +205,14 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/iv30"
+                android:id="@+id/iv16"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:background="@color/graph_background"
                 android:scaleType="matrix" />
             
             <ImageView
-                android:id="@+id/iv29"
+                android:id="@+id/iv15"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:layout_marginLeft="@dimen/top_margin"
@@ -220,7 +220,7 @@
                 android:scaleType="matrix" />
             
             <ImageView
-                android:id="@+id/iv28"
+                android:id="@+id/iv14"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:layout_marginLeft="@dimen/graph_space_margin_1"
@@ -228,7 +228,7 @@
                 android:scaleType="matrix" />
             
             <ImageView
-                android:id="@+id/iv27"
+                android:id="@+id/iv13"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:layout_marginLeft="@dimen/graph_space_margin_1"
@@ -236,7 +236,7 @@
                 android:scaleType="matrix" />
             
             <ImageView
-                android:id="@+id/iv26"
+                android:id="@+id/iv12"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:layout_marginLeft="@dimen/graph_space_margin_1"
@@ -253,14 +253,14 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/iv11"
+                android:id="@+id/iv27"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:background="@color/graph_background"
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv12"
+                android:id="@+id/iv28"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:layout_marginLeft="@dimen/graph_space_margin_1"
@@ -268,7 +268,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv13"
+                android:id="@+id/iv29"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:layout_marginLeft="@dimen/bottom_margin"
@@ -276,7 +276,7 @@
                 android:scaleType="matrix" />
 
             <ImageView
-                android:id="@+id/iv14"
+                android:id="@+id/iv30"
                 android:layout_width="@dimen/graph_portrait_width"
                 android:layout_height="@dimen/graph_portrait_height"
                 android:layout_marginLeft="@dimen/graph_space_margin_1"

@@ -73,10 +73,12 @@ public class GripActivity extends Activity {
 		
 		mRegistStartDialog = new AlertDialog.Builder(GripActivity.this).create();
 		mRegistStartDialog.setMessage(getBaseContext().getResources().getString(R.string.setting_grip_register_message) + 5);
+		mRegistStartDialog.setCancelable(false);
 		mRegistStartDialog.show();
 		
 		mRegistOkDialog = new AlertDialog.Builder(GripActivity.this).create();
 		mRegistOkDialog.setMessage(getBaseContext().getResources().getString(R.string.setting_grip_register_ok));
+		mRegistOkDialog.setCancelable(false);
 		mRegistOkDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.common_ok), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

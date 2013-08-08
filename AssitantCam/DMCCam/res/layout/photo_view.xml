@@ -1,0 +1,140 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000" >
+
+    <RelativeLayout
+        android:id="@+id/photo_view_title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/title_bg" >
+
+        <TextView
+            android:id="@+id/photo_view_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="17dp"
+            android:gravity="center_vertical"
+            android:text="@string/gallery_photoview_shot_title"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/title_divide" />
+
+            <Button
+                android:id="@+id/photo_view_save"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_titlebar_save" />
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/title_divide" />
+
+            <Button
+                android:id="@+id/photo_view_share"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_titlebar_share" />
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/title_divide" />
+
+            <Button
+                android:id="@+id/photo_view_delete"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_titlebar_delete" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/photo_view_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/photo_view_infomation"
+        android:layout_below="@+id/photo_view_title_rl" />
+
+    <LinearLayout
+        android:id="@+id/photo_view_infomation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:paddingLeft="46dp"
+        android:paddingRight="46dp" >
+
+        <TextView
+            android:id="@+id/photo_view_photoname"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="2013년 7월 1일 월요일 15시 30분 역삼동 맑은날 "
+            android:textColor="@drawable/custom_photo_view_name_text"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#50000000" />
+
+        <LinearLayout
+            android:id="@+id/photo_view_detail"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:gravity="center_vertical"
+                android:text="@string/gallery_photoview_detail_title"
+                android:textColor="@drawable/custom_photo_view_detail_text"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:background="@drawable/icon_photoview_detail"
+                android:clickable="false"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#50000000" />
+
+        <TextView
+            android:id="@+id/photo_view_photolist"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:gravity="center_vertical"
+            android:text="@string/gallery_photoview_photolist"
+            android:textColor="@drawable/custom_photo_view_detail_text"
+            android:textSize="15sp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</RelativeLayout>

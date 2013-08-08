@@ -61,5 +61,16 @@
     
     <!-- 초기화 메세지 -->
     <string name="setting_reset_message">설정상태를 모두 초기화 합니다.</string>
+    
+    <!-- photo view (촬영사진 확인, 사진 확인) -->
+    <string name="gallery_photoview_shot_title">촬영사진 확인</string>
+    <string name="gallery_photoview_detail_title">상세정보관리</string>
+    <string name="gallery_photoview_detail_memo">메모</string>
+    <string name="gallery_photoview_detail_recording">녹음하기</string>
+    <string name="gallery_photoview_detail_recording_play">녹음재생</string>
+    <string name="gallery_photoview_detail_recording_delete">녹음삭제</string>
+    <string name="gallery_photoview_detail_categoty">카테고리설정</string>
+    <string name="gallery_photoview_detail_soundshot_play">사운드&amp;샷 재생</string>
+    <string name="gallery_photoview_photolist">사진리스트</string>
 
 </resources>

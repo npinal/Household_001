@@ -46,6 +46,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="com.dmc.camera.gallery.PhotoViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" 
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"/>
 
         <receiver
             android:name="com.dmc.camera.assist.SettingsReceiver"

@@ -74,7 +74,7 @@ public class GripActivity extends Activity {
 	GripSensorEventManager mGripSensorEventManager;
 	Context mContext;
 
-	String mPatternString = "";
+	String mSaveString = "";
 	String mSavePath;
 
 	int mQuickRunType;
@@ -103,6 +103,7 @@ public class GripActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						fileSave();
 						mRegistOkDialog.dismiss();
 					}
 				});
@@ -198,7 +199,7 @@ public class GripActivity extends Activity {
 		super.onPause();
 		Log.e(TAG, "onPause");
 
-		handler.removeMessages(0);
+//		handler.removeMessages(0);
 
 		mGripSensorEventManager.removeCollectSensorDataHandler();
 		mGripSensorEventManager.unregisterCAListener();
@@ -211,6 +212,7 @@ public class GripActivity extends Activity {
 
 		if (mRegistStartDialog.isShowing() == false) {
 			mGripSensorEventManager.registerCALstner();
+			mGripSensorEventManager.setOnSensorDataListner(mSensorDataListener);
 		}
 	}
 
@@ -249,10 +251,10 @@ public class GripActivity extends Activity {
 		FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
 
 		File file = new File(mSavePath);
-		Log.d("Jihye", "mSavePath : " + mSavePath);
+//		Log.d("Jihye", "mSavePath : " + mSavePath);
 		FileUtils.deleteFile(file);
 
-		return FileUtils.writeFile(file, mPatternString.getBytes());
+		return FileUtils.writeFile(file, mSaveString.getBytes());
 	}
 
 	private void accruePattern(int value[], int power, int hand) {
@@ -268,9 +270,9 @@ public class GripActivity extends Activity {
 		accrue = accrue + Define.FILE_SEPARATOR;
 		accrue = accrue + hand;
 		accrue = accrue + "\n";
-		mPatternString = mPatternString + accrue;
+		mSaveString = mSaveString + accrue;
 
-		Log.d("Jihye", "mPatternString : " + mPatternString);
+//		Log.d("Jihye", "mPatternString : " + mPatternString);
 	}
 
 	private void fileParse(String path) {
@@ -284,7 +286,7 @@ public class GripActivity extends Activity {
 				while ((line = br.readLine()) != null) {
 					StringBuilder sb = new StringBuilder();
 					sb.append(line);
-					Log.d("Jihye", "fileParse " + sb.toString());
+//					Log.d("Jihye", "fileParse " + sb.toString());
 					String[] parse = sb.toString().split(Define.FILE_SEPARATOR);
 
 					String valueString[] = parse[0].split(",");
@@ -389,41 +391,90 @@ public class GripActivity extends Activity {
 		final int paint_color = color;
 		final int paint_alpha = alpha;
 
-		runOnUiThread(new Runnable() {
+		Bitmap output = Bitmap.createBitmap(bm_width, bm_height,
+				Config.ARGB_8888);
+		Canvas canvas = new Canvas(output);
 
-			@Override
-			public void run() {
-				Bitmap output = Bitmap.createBitmap(bm_width, bm_height,
-						Config.ARGB_8888);
-				Canvas canvas = new Canvas(output);
+		Paint paint = new Paint();
+		Rect rect = new Rect(rect_left, rect_top, bm_width, bm_height);
+		RectF rectF = new RectF(rect);
 
-				Paint paint = new Paint();
-				Rect rect = new Rect(rect_left, rect_top, bm_width, bm_height);
-				RectF rectF = new RectF(rect);
+		paint.setAntiAlias(true);
+		canvas.drawARGB(0, 0, 0, 0);
+		paint.setColor(paint_color);
+		paint.setAlpha(paint_alpha);
+		canvas.drawRect(rectF, paint);
 
-				paint.setAntiAlias(true);
-				canvas.drawARGB(0, 0, 0, 0);
-				paint.setColor(paint_color);
-				paint.setAlpha(paint_alpha);
-				canvas.drawRect(rectF, paint);
+		Drawable d = iv.getDrawable();
 
-				Drawable d = iv.getDrawable();
+		iv.setImageBitmap(output);
 
-				iv.setImageBitmap(output);
+		if (d != null) {
+			if (d instanceof BitmapDrawable) {
+				Bitmap b = ((BitmapDrawable) d).getBitmap();
+				if (b != null) {
+					b.recycle();
+				}
+			}
+		}
 
-				if (d != null) {
-					if (d instanceof BitmapDrawable) {
-						Bitmap b = ((BitmapDrawable) d).getBitmap();
-						if (b != null) {
-							b.recycle();
+		return;
+	}
+	
+	OnSensorDataListner mSensorDataListener = new OnSensorDataListner() {
+		
+		@Override
+		public void OnSensorDataListner(SensorDataEvent sensorData) {
+			// TODO
+			Log.d("Jihye", "mSensorDataListener result : " + sensorData.mResult + ", power : " + sensorData.mPower + ", hand : " + sensorData.mHand);
+			String log = "mValue : ";
+			for(int i=0; i < sensorData.mValue.length; i++){
+				log = log + sensorData.mValue[i];
+			}
+			
+			Log.d("Jihye", "mSensorDataListener " + log);
+			
+			if(sensorData.mResult == true){ // result 가 false 면 입력중에 손이 바뀌거나 뭐 이런거 .. 
+				accruePattern(sensorData.mValue, sensorData.mPower, sensorData.mHand);
+				for(int i=0; i < sensorData.mValue.length; i++){
+					
+					int value = sensorData.mValue[i];
+					int type = 0;
+					
+					if(value == 1 && sensorData.mPower == Define.POWER_FULL){	// && sensorData.mPower == Define.POWER_FULL
+						if (i < 11) {
+							type = RIGHT;
+						} else if (i < 16) {
+							type = TOP;
+						} else if (i < 26) {
+							type = LEFT;
+						} else if (i < 30) {
+							type = BOTTOM;
+						}
+						value = 0xFF;
+						drawBitmap(ivList.get(i), value, type);
+					}
+					else{
+						Drawable d = ivList.get(i).getDrawable();
+						ivList.get(i).setImageBitmap(null);
+	
+						if (d != null) {
+							if (d instanceof BitmapDrawable) {
+								Bitmap b = ((BitmapDrawable) d).getBitmap();
+								if (b != null) {
+									b.recycle();
+								}
+							}
 						}
 					}
 				}
 			}
-		});
-
-		return;
-	}
+			else{
+				// 입력 실패 처리 필요 
+				Log.d("Jihye", "mSensorDataListener data fail");
+			}
+		}
+	};
 
 	OnClickListener mClick = new OnClickListener() {
 
@@ -445,22 +496,16 @@ public class GripActivity extends Activity {
 				dialogHandler.sendEmptyMessageDelayed(msg.what + 1, 1000);
 			} else {
 				mRegistStartDialog.dismiss();
-				handler.sendEmptyMessageDelayed(0, 0);
+//				handler.sendEmptyMessageDelayed(0, 0);
 
 				mGripSensorEventManager.registerCALstner();
-				mGripSensorEventManager
-						.setOnSensorDataListner(new OnSensorDataListner() {
-
-							@Override
-							public void OnSensorDataListner(SensorDataEvent e) {
-								// TODO Auto-generated method stub
-
-							}
-						});
+				mGripSensorEventManager.setOnSensorDataListner(mSensorDataListener);
 			}
 
 		}
 	};
+	
+	/*
 
 	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler() {
@@ -515,5 +560,6 @@ public class GripActivity extends Activity {
 			}
 		}
 	};
+	*/
 
 }

@@ -23,7 +23,7 @@
     <color name="graph_background">#20000000</color>
     <color name="background_left">#10FF0000</color>
      -->
-    <color name="graph_background">#3000FF00</color><!-- 3000FF00 -->
+    <color name="graph_background">#00000000</color><!-- 3000FF00 -->
     <color name="background_left">#00000000</color>
     <color name="background_right">#00000000</color><!-- #1000FF00 -->
 

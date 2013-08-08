@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class FileUtils {
 	
-	private static final String LOG_TAG = "Utils";
+	private static final String LOG_TAG = "FileUtils";
 	
 	/**
      * 디렉토리 생성 

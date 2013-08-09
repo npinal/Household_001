@@ -9,6 +9,10 @@ public class Define {
 	public static final String SETTING_QUICK_CAMERA = SETTING_SAVE_PATH + "quick_camera.txt";
 	public static final String SETTING_QUICK_EBOOK = SETTING_SAVE_PATH + "quick_ebook.txt";
 	
+	public static final String PATTERN_QUICK_LOCK = SETTING_SAVE_PATH + "quick_lock_pattern.txt"; 	
+	public static final String PATTERN_QUICK_CAMERA = SETTING_SAVE_PATH + "quick_camera_pattern.txt"; 	
+	public static final String PATTERN_QUICK_EBOOK = SETTING_SAVE_PATH + "quick_ebook_pattern.txt"; 	
+	
 	public static final String FILE_SEPARATOR = "-";
 	
 	public static final int POWER_MIDDLE = 0x00;
@@ -29,4 +33,11 @@ public class Define {
 	public static final int HAND_STATUS_GRIP_PUSH = 0x02;
 	public static final int HAND_STATUS_GRIP_RELEASE = 0x03;	
 	public static final int HAND_STATUS_GRIP_ERROR = 0x04;
+	
+	public static final long GRIP_REGIST_TIMEOUT = 1000 * 10;	// 10초
+	
+	public static final long GRIP_THRESHOLD = 1000 * 3; 	// 3초 
+	public static final int GRIP_SETTING_THRESHOLD = 500; 	// 0.5초 
+	
+	
 }

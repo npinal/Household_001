@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.test.suitebuilder.TestSuiteBuilder.FailedToCreateTests;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,13 +44,9 @@ import com.dmc.grip.utils.PrintUtils;
 
 public class GripActivity extends Activity {
 	private static final String TAG = "MainActivity";
-	ImageView iv1;
-	ImageView iv2;
 
 	ArrayList<ImageView> ivList;
 
-	private static String csvFileName;
-	private BufferedReader br;
 	public static final float total_width = 540; // 1920*1080
 
 	public static final float WIDTH = 540;
@@ -59,25 +56,26 @@ public class GripActivity extends Activity {
 	public static final int RIGHT = 1;
 	public static final int TOP = 2;
 	public static final int BOTTOM = 3;
-
-	public int positionX = 0;
-	public int positionXX = 0;
-
-	ArrayList<String> mCsvLine;
-
-	int gripValue[][];
+	
+	public static final int GRIP_TIMEOUT = 0;
+	public static final int GRIP_FAIL = 1;
 
 	AlertDialog mRegistStartDialog;
 	AlertDialog mRegistOkDialog;
+	AlertDialog mRegistFailDialog;
 	Button mRegistOk;
 
 	GripSensorEventManager mGripSensorEventManager;
 	Context mContext;
 
-	String mSaveString = "";
-	String mSavePath;
+	String mSaveSettingString = "";
+	String mSaveSettingPath;
+	
+	String mPatternSavePath;
 
 	int mQuickRunType;
+	
+	Boolean mFailFlag = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,18 +101,24 @@ public class GripActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						fileSave();
 						mRegistOkDialog.dismiss();
+						finish();
+					}
+				});
+		
+		mRegistFailDialog = new AlertDialog.Builder(GripActivity.this).create();
+		mRegistFailDialog.setMessage("");
+		mRegistFailDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+				getString(R.string.common_ok),
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
 					}
 				});
 
 		mRegistOk = (Button) findViewById(R.id.grip_regist_ok);
 		mRegistOk.setOnClickListener(mClick);
-
-		// csvFileName = getIntent().getExtras().getString("csvFileName");
-		// Log.d(TAG, "csvFileName = " + csvFileName);
-
-		mCsvLine = new ArrayList<String>();
 
 		ivList = new ArrayList<ImageView>();
 		ivList.add((ImageView) findViewById(R.id.iv1));
@@ -156,11 +160,14 @@ public class GripActivity extends Activity {
 		mQuickRunType = intent.getIntExtra(QuickRunSetting.QUICK_TYPE,
 				QuickRunSetting.QUICK_RUN_LOCK);
 		if (mQuickRunType == QuickRunSetting.QUICK_RUN_LOCK) {
-			mSavePath = Define.SETTING_QUICK_LOCK;
+			mSaveSettingPath = Define.SETTING_QUICK_LOCK;
+			mPatternSavePath = Define.PATTERN_QUICK_LOCK;
 		} else if (mQuickRunType == QuickRunSetting.QUICK_RUN_CAMERA) {
-			mSavePath = Define.SETTING_QUICK_CAMERA;
+			mSaveSettingPath = Define.SETTING_QUICK_CAMERA;
+			mPatternSavePath = Define.PATTERN_QUICK_CAMERA;
 		} else {
-			mSavePath = Define.SETTING_QUICK_EBOOK;
+			mSaveSettingPath = Define.SETTING_QUICK_EBOOK;
+			mPatternSavePath = Define.PATTERN_QUICK_EBOOK;
 		}
 
 		// --- Start GripSensorEventManager
@@ -216,65 +223,121 @@ public class GripActivity extends Activity {
 		}
 	}
 
-	private void csvRead() throws IOException {
-		// InputStream csvStream;
-
-		try {
-			File path = new File(Environment.getExternalStorageDirectory()
-					+ "/Grip_Sensor_Test/" + csvFileName);
-			Log.e(TAG, "path = " + path);
-
-			FileInputStream fileInputStream = new FileInputStream(path);
-			// csvStream =
-			// getBaseContext().getResources().getAssets().open("Grip1-1-1.csv");
-			br = new BufferedReader(new InputStreamReader(fileInputStream,
-					"UTF-8"));
-
-			String line = null;
-
-			Log.d(TAG, "csvRead BufferedReader end");
-
-			while ((line = br.readLine()) != null) {
-				StringBuilder sb = new StringBuilder();
-				sb.append(line);
-				mCsvLine.add(sb.toString());
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			Log.e(TAG, "csv read error : " + e);
-		}
-
-	}
-
-	private Boolean fileSave() {
+	private Boolean SettingFileSave() {
 		FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
 
-		File file = new File(mSavePath);
-//		Log.d("Jihye", "mSavePath : " + mSavePath);
+		File file = new File(mSaveSettingPath);
+		Log.d("Jihye", "mSaveSettingString : " + mSaveSettingString);
 		FileUtils.deleteFile(file);
 
-		return FileUtils.writeFile(file, mSaveString.getBytes());
+		return FileUtils.writeFile(file, mSaveSettingString.getBytes());
 	}
-
-	private void accruePattern(int value[], int power, int hand) {
+	
+	private Boolean PatternFileSave() {
 		String accrue = "";
-		for (int i = 0; i < value.length; i++) {
-			accrue = accrue + value[i];
-			if (i != value.length - 1) {
-				accrue = accrue + ",";
+		int token = 1;
+		int beforePower = -1;
+		int afterPower = -1;
+		int time = 0;
+		
+		File file = new File(mSaveSettingPath);
+		if (file != null && file.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(file);
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						fis, "UTF-8"));
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append(line);
+					String[] parse = sb.toString().split(Define.FILE_SEPARATOR);
+					
+					int power = Integer.parseInt(parse[1]);
+
+					if(accrue.equals("") && power == Define.POWER_FULL){
+						accrue = accrue + parse[0];
+						accrue = accrue + Define.FILE_SEPARATOR;
+						accrue = accrue + parse[2];
+					}
+					
+					if(!accrue.equals("")){
+						time = time + Define.GRIP_SETTING_THRESHOLD;
+						
+						if(beforePower == -1){
+							beforePower = power;
+							afterPower = power;
+							time = time + Define.GRIP_SETTING_THRESHOLD;
+						}
+						else{
+							afterPower = power;
+							
+							if(beforePower != afterPower){
+								accrue = accrue + Define.FILE_SEPARATOR;
+								accrue = accrue + beforePower;
+								accrue = accrue + Define.FILE_SEPARATOR;
+								accrue = accrue + token;
+								
+								token = 1;
+								time = Define.GRIP_SETTING_THRESHOLD;
+							}
+							else{
+								if(time >= Define.GRIP_THRESHOLD){
+									time = 0;
+									token = token + 1;
+								}
+							}
+						}
+						beforePower = afterPower;
+						
+					}
+				}
+				fis.close();
+				
+				if(time > 0){
+					if(token == 0){
+						token = token + 1;
+					}
+					accrue = accrue + Define.FILE_SEPARATOR;
+					accrue = accrue + beforePower;
+					accrue = accrue + Define.FILE_SEPARATOR;
+					accrue = accrue + token;
+				}
+				
+				Log.d("Jihye", "PatternFileSave : " + accrue);
+				
+				FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
+
+				File saveFile = new File(mPatternSavePath);
+				FileUtils.deleteFile(saveFile);
+
+				return FileUtils.writeFile(saveFile, accrue.getBytes());
+				
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-		accrue = accrue + Define.FILE_SEPARATOR;
-		accrue = accrue + power;
-		accrue = accrue + Define.FILE_SEPARATOR;
-		accrue = accrue + hand;
-		accrue = accrue + "\n";
-		mSaveString = mSaveString + accrue;
-
-//		Log.d("Jihye", "mPatternString : " + mPatternString);
+		return false;
 	}
 
+	private void accrueSetting(int value[], int power, int hand) {
+		String accrueSetting = "";
+		for (int i = 0; i < value.length; i++) {
+			accrueSetting = accrueSetting + value[i];
+			if (i != value.length - 1) {
+				accrueSetting = accrueSetting + ",";
+			}
+		}
+		accrueSetting = accrueSetting + Define.FILE_SEPARATOR;
+		accrueSetting = accrueSetting + power;
+		accrueSetting = accrueSetting + Define.FILE_SEPARATOR;
+		accrueSetting = accrueSetting + hand;
+		accrueSetting = accrueSetting + "\n";
+		mSaveSettingString = mSaveSettingString + accrueSetting;
+		
+//		Log.d("Jihye", "mPatternString : " + mPatternString);
+	}
+	
 	private void fileParse(String path) {
 		File file = new File(path);
 		if (file != null && file.exists()) {
@@ -435,7 +498,7 @@ public class GripActivity extends Activity {
 			Log.d("Jihye", "mSensorDataListener " + log);
 			
 			if(sensorData.mResult == true){ // result 가 false 면 입력중에 손이 바뀌거나 뭐 이런거 .. 
-				accruePattern(sensorData.mValue, sensorData.mPower, sensorData.mHand);
+				accrueSetting(sensorData.mValue, sensorData.mPower, sensorData.mHand);
 				for(int i=0; i < sensorData.mValue.length; i++){
 					
 					int value = sensorData.mValue[i];
@@ -470,8 +533,8 @@ public class GripActivity extends Activity {
 				}
 			}
 			else{
-				// 입력 실패 처리 필요 
 				Log.d("Jihye", "mSensorDataListener data fail");
+				failDialogHandler.sendEmptyMessage(GRIP_FAIL);
 			}
 		}
 	};
@@ -481,6 +544,13 @@ public class GripActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.grip_regist_ok) {
+				failDialogHandler.removeMessages(GRIP_FAIL);
+				failDialogHandler.removeMessages(GRIP_TIMEOUT);
+				mFailFlag = false;
+				
+				SettingFileSave();
+				PatternFileSave();
+				
 				mRegistOkDialog.show();
 			}
 		}
@@ -496,70 +566,30 @@ public class GripActivity extends Activity {
 				dialogHandler.sendEmptyMessageDelayed(msg.what + 1, 1000);
 			} else {
 				mRegistStartDialog.dismiss();
-//				handler.sendEmptyMessageDelayed(0, 0);
 
 				mGripSensorEventManager.registerCALstner();
 				mGripSensorEventManager.setOnSensorDataListner(mSensorDataListener);
+				
+				failDialogHandler.sendEmptyMessageDelayed(GRIP_TIMEOUT, Define.GRIP_REGIST_TIMEOUT);
 			}
 
 		}
 	};
 	
-	/*
-
-	@SuppressLint("HandlerLeak")
-	private Handler handler = new Handler() {
+	private Handler failDialogHandler = new Handler() {
 		public void handleMessage(Message msg) {
-
-			int value = 0;
-
-			if (gripValue != null && gripValue.length > 0) {
-				value = gripValue[positionX][positionXX];
-
-				if (value != 0) {
-					int type = 0;
-
-					if (positionXX < 10) {
-						type = RIGHT;
-					} else if (positionXX < 14) {
-						type = TOP;
-					} else if (positionXX < 25) {
-						type = LEFT;
-					} else if (positionXX < 30) {
-						type = BOTTOM;
-					}
-
-					drawBitmap(ivList.get(positionXX), value, type);
-				} else {
-					Drawable d = ivList.get(positionXX).getDrawable();
-					ivList.get(positionXX).setImageBitmap(null);
-
-					if (d != null) {
-						if (d instanceof BitmapDrawable) {
-							Bitmap b = ((BitmapDrawable) d).getBitmap();
-							if (b != null) {
-								b.recycle();
-							}
-						}
-					}
+			if(mFailFlag == true){
+				if(msg.what == GRIP_TIMEOUT){
+					mRegistFailDialog.setMessage(getString(R.string.setting_grip_regist_fail_timeout));
+					mRegistFailDialog.show();
 				}
-				positionX = positionX + 1;
-
-				if (positionX < mCsvLine.size()) {
-					positionXX = positionXX + 1;
-					if (positionXX >= 30) {
-						positionXX = 0;
-					}
-					handler.sendEmptyMessageDelayed(0, 0);
-				} else {
-					Log.d(TAG, "mainActivity end ~~~~`");
-					Toast.makeText(getBaseContext(),
-							csvFileName + " Grip data Finished.",
-							Toast.LENGTH_SHORT).show();
+				else if(msg.what == GRIP_FAIL){
+					mRegistFailDialog.setMessage(getString(R.string.setting_grip_regist_fail_false));
+					mRegistFailDialog.show();
 				}
 			}
 		}
 	};
-	*/
+	
 
 }

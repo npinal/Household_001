@@ -47,5 +47,8 @@
 	<string name="setting_grip_register_message">원하는 자세로 디바이스를 손에 쥐었나요? 지금부터 그립 패턴 입력이 시작됩니다.\n\n</string>
 	<string name="setting_grip_register_ok">그립 패턴 입력이 완료되었습니다. 그립 패턴이 다음과 같이 생성되었습니다.</string>
 	
+	<string name="setting_grip_regist_fail_timeout">그립 패턴 입력시간이 초과하였습니다.</string>
+	<string name="setting_grip_regist_fail_false">그립 패턴이 잘못 입력되었습니다. 처음부터 다시 시도해주세요.</string>
+	
 	
 </resources>

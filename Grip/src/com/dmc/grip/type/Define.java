@@ -3,6 +3,8 @@ package com.dmc.grip.type;
 import android.os.Environment;
 
 public class Define {
+	public static Boolean DEBUG = false;
+	
 	public static final String SETTING_SAVE_PATH = Environment.getExternalStorageDirectory() + "/Grip_Pattern/";
 	
 	public static final String SETTING_QUICK_LOCK = SETTING_SAVE_PATH + "quick_lock.txt";

@@ -100,6 +100,7 @@ public class GripSensorEventManager {
 	
 	public void setOnSensorDataListner(OnSensorDataListner sl){
 		mSensorDataListner = sl;
+		isStop = false;
 		
 		if (sl != null)
 			collectSensorDataHandler.sendEmptyMessage(1000);

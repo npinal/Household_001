@@ -3,11 +3,9 @@ package com.dmc.grip.setting;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,16 +21,13 @@ import android.graphics.Bitmap.Config;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.test.suitebuilder.TestSuiteBuilder.FailedToCreateTests;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.dmc.grip.R;
 import com.dmc.grip.data.OnSensorDataListner;
@@ -40,7 +35,6 @@ import com.dmc.grip.data.SensorDataEvent;
 import com.dmc.grip.sensor.GripSensorEventManager;
 import com.dmc.grip.type.Define;
 import com.dmc.grip.utils.FileUtils;
-import com.dmc.grip.utils.PrintUtils;
 
 public class GripActivity extends Activity {
 	private static final String TAG = "MainActivity";
@@ -173,33 +167,8 @@ public class GripActivity extends Activity {
 		// --- Start GripSensorEventManager
 		mGripSensorEventManager = new GripSensorEventManager(mContext);
 
-		// test code
-		/*
-		 * int value[] =
-		 * {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9}; int
-		 * power = Define.POWER_FULL; int hand = Define.HAND_LEFT;
-		 * accruePattern(value, power, hand); accruePattern(value, power, hand);
-		 * 
-		 * Boolean result = fileSave();
-		 * 
-		 * Log.d("Jihye", "fileSave result : " + result);
-		 * 
-		 * fileParse(mSavePath);
-		 */
-
 		dialogHandler.sendEmptyMessage(0);
 
-		/*
-		 * try { csvRead(); } catch (IOException e) { e.printStackTrace(); }
-		 * 
-		 * gripValue = new int[mCsvLine.size()][ivList.size()];
-		 * 
-		 * for (int i = 0; i < mCsvLine.size(); i++) { String value[] =
-		 * mCsvLine.get(i).split(","); for (int j = 0; j < ivList.size(); j++) {
-		 * gripValue[i][j] = Integer.parseInt(value[j], 16); } }
-		 */
-
-		// handler.sendEmptyMessageDelayed(0, 0);
 	}
 
 	protected void onPause() {
@@ -221,6 +190,16 @@ public class GripActivity extends Activity {
 			mGripSensorEventManager.registerCALstner();
 			mGripSensorEventManager.setOnSensorDataListner(mSensorDataListener);
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		failDialogHandler.removeMessages(GRIP_FAIL);
+		failDialogHandler.removeMessages(GRIP_TIMEOUT);
+		mFailFlag = false;
 	}
 
 	private Boolean SettingFileSave() {
@@ -267,7 +246,7 @@ public class GripActivity extends Activity {
 						if(beforePower == -1){
 							beforePower = power;
 							afterPower = power;
-							time = time + Define.GRIP_SETTING_THRESHOLD;
+							time = Define.GRIP_SETTING_THRESHOLD;
 						}
 						else{
 							afterPower = power;
@@ -488,7 +467,6 @@ public class GripActivity extends Activity {
 		
 		@Override
 		public void OnSensorDataListner(SensorDataEvent sensorData) {
-			// TODO
 			Log.d("Jihye", "mSensorDataListener result : " + sensorData.mResult + ", power : " + sensorData.mPower + ", hand : " + sensorData.mHand);
 			String log = "mValue : ";
 			for(int i=0; i < sensorData.mValue.length; i++){

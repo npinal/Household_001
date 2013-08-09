@@ -38,7 +38,7 @@ import com.dmc.grip.utils.CustomLog;
 import com.dmc.grip.utils.FileUtils;
 
 public class GripActivity extends Activity {
-	private static final String TAG = "MainActivity";
+	private static final String LOG_TAG = "GripActivity";
 
 	ArrayList<ImageView> ivList;
 
@@ -174,7 +174,7 @@ public class GripActivity extends Activity {
 
 	protected void onPause() {
 		super.onPause();
-		Log.e(TAG, "onPause");
+		Log.e(LOG_TAG, "onPause");
 
 //		handler.removeMessages(0);
 
@@ -185,7 +185,7 @@ public class GripActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.e(TAG, "onResume");
+		Log.e(LOG_TAG, "onResume");
 
 		if (mRegistStartDialog.isShowing() == false) {
 			mGripSensorEventManager.registerCALstner();
@@ -207,7 +207,7 @@ public class GripActivity extends Activity {
 		FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
 
 		File file = new File(mSaveSettingPath);
-		CustomLog.d("Jihye", "mSaveSettingString : " + mSaveSettingString);
+		CustomLog.d(LOG_TAG, "mSaveSettingString : " + mSaveSettingString);
 		FileUtils.deleteFile(file);
 
 		return FileUtils.writeFile(file, mSaveSettingString.getBytes());
@@ -291,7 +291,7 @@ public class GripActivity extends Activity {
 				accrue = accrue + Define.FILE_SEPARATOR;
 				accrue = accrue + all_token;
 				
-				CustomLog.d("Jihye", "PatternFileSave : " + accrue);
+				CustomLog.d(LOG_TAG, "PatternFileSave : " + accrue);
 				
 				FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
 
@@ -322,7 +322,7 @@ public class GripActivity extends Activity {
 		accrueSetting = accrueSetting + "\n";
 		mSaveSettingString = mSaveSettingString + accrueSetting;
 		
-//		CustomLog.d("Jihye", "mPatternString : " + mPatternString);
+//		CustomLog.d(LOG_TAG, "mPatternString : " + mPatternString);
 	}
 	
 	private void fileParse(String path) {
@@ -336,23 +336,23 @@ public class GripActivity extends Activity {
 				while ((line = br.readLine()) != null) {
 					StringBuilder sb = new StringBuilder();
 					sb.append(line);
-//					CustomLog.d("Jihye", "fileParse " + sb.toString());
+//					CustomLog.d(LOG_TAG, "fileParse " + sb.toString());
 					String[] parse = sb.toString().split(Define.FILE_SEPARATOR);
 
 					String valueString[] = parse[0].split(",");
 					int value[] = new int[valueString.length];
 					for (int i = 0; i < valueString.length; i++) {
 						value[i] = Integer.parseInt(valueString[i]);
-						// CustomLog.d("Jihye", "value[i] " + value[i]);
+						// CustomLog.d(LOG_TAG, "value[i] " + value[i]);
 					}
 
 					int power = Integer.parseInt(parse[1]);
 					int hand = Integer.parseInt(parse[2]);
 
-					// CustomLog.d("Jihye", "power : " + power + ", hand : " + hand);
+					// CustomLog.d(LOG_TAG, "power : " + power + ", hand : " + hand);
 
 					// for(int i=0; i < parse.length; i++){
-					// CustomLog.d("Jihye", "fileParse '" + Define.FILE_SEPARATOR +
+					// CustomLog.d(LOG_TAG, "fileParse '" + Define.FILE_SEPARATOR +
 					// "' " + parse[i]);
 					// }
 				}
@@ -475,13 +475,13 @@ public class GripActivity extends Activity {
 		
 		@Override
 		public void OnSensorDataListner(SensorDataEvent sensorData) {
-			CustomLog.d("Jihye", "mSensorDataListener result : " + sensorData.mResult + ", power : " + sensorData.mPower + ", hand : " + sensorData.mHand);
+			CustomLog.d(LOG_TAG, "mSensorDataListener result : " + sensorData.mResult + ", power : " + sensorData.mPower + ", hand : " + sensorData.mHand);
 			String log = "mValue : ";
 			for(int i=0; i < sensorData.mValue.length; i++){
 				log = log + sensorData.mValue[i];
 			}
 			
-			CustomLog.d("Jihye", "mSensorDataListener " + log);
+			CustomLog.d(LOG_TAG, "mSensorDataListener " + log);
 			
 			if(sensorData.mResult == true){ // result 가 false 면 입력중에 손이 바뀌거나 뭐 이런거 .. 
 				accrueSetting(sensorData.mValue, sensorData.mPower, sensorData.mHand);
@@ -519,7 +519,7 @@ public class GripActivity extends Activity {
 				}
 			}
 			else{
-				CustomLog.d("Jihye", "mSensorDataListener data fail");
+				CustomLog.d(LOG_TAG, "mSensorDataListener data fail");
 				failDialogHandler.sendEmptyMessage(GRIP_FAIL);
 			}
 		}

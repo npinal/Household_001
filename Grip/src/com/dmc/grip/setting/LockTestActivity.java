@@ -21,6 +21,8 @@ import com.dmc.grip.utils.FileUtils;
 
 public class LockTestActivity extends Activity {
 	
+	public static final String LOG_TAG = "LockTestActivity";
+	
 	GripSensorEventManager mGripSensorEventManager;
 	
 	String mInputData = "";
@@ -65,10 +67,10 @@ public class LockTestActivity extends Activity {
 				log = log + sensorData.mValue[i];
 			}
 			log = log + " / result : " + sensorData.mResult + ", power : " + sensorData.mPower + ", hand : " + sensorData.mHand;
-			CustomLog.d("Jihye", "mSensorDataListener " + log);
+			CustomLog.d(LOG_TAG, "mSensorDataListener " + log);
 			
 			if(sensorData.mResult == false){
-				CustomLog.e("Jihye", "resetData");
+				CustomLog.e(LOG_TAG, "resetData");
 				resetData();
 			}
 			else{
@@ -78,7 +80,7 @@ public class LockTestActivity extends Activity {
 						for (int i=0; i < mPatternData.length; i++){
 							if(mPatternData[i] != null){
 								compareResult = mGripSensorEventManager.compareSensorValue(Define.WRONG_MAX_COUNT, mPatternData[i].value, sensorData.mValue);
-								CustomLog.d("Jihye", "compareResult : " + compareResult);
+								CustomLog.d(LOG_TAG, "compareResult : " + compareResult);
 								if(compareResult == true){
 									mPatternType = i;
 									break;
@@ -96,7 +98,7 @@ public class LockTestActivity extends Activity {
 							mInputData = mInputData + Define.FILE_SEPARATOR;
 							mInputData = mInputData + sensorData.mHand;
 							
-							CustomLog.e("Jihye", "save !!! value : " + mInputData);
+							CustomLog.e(LOG_TAG, "save !!! value : " + mInputData);
 						}
 					}
 				}
@@ -114,7 +116,7 @@ public class LockTestActivity extends Activity {
 					else{
 						mAfterPower = power;
 						
-						CustomLog.e("Jihye", "mBeforePower : " + mBeforePower + ", mAfterPower : " + mAfterPower);
+						CustomLog.e(LOG_TAG, "mBeforePower : " + mBeforePower + ", mAfterPower : " + mAfterPower);
 						
 						if(mBeforePower != mAfterPower){
 							mInputData = mInputData + Define.FILE_SEPARATOR;
@@ -124,7 +126,7 @@ public class LockTestActivity extends Activity {
 							
 							mAllToken = mAllToken + 1;
 							
-							CustomLog.e("Jihye", "save !!! mBeforePower != mAfterPower : " + mInputData);
+							CustomLog.e(LOG_TAG, "save !!! mBeforePower != mAfterPower : " + mInputData);
 							
 							mToken = 1;
 							mTime = Define.GRIP_SETTING_THRESHOLD;
@@ -147,16 +149,16 @@ public class LockTestActivity extends Activity {
 									mInputData = mInputData + mBeforePower;
 									mInputData = mInputData + Define.FILE_SEPARATOR;
 									mInputData = mInputData + mToken;
-									CustomLog.e("Jihye", "save !!! mTime > 0 mInputData : " + mInputData);
+									CustomLog.e(LOG_TAG, "save !!! mTime > 0 mInputData : " + mInputData);
 									
 //									mAllToken = mAllToken + 1;
 								}
 								
 								mInputData = mInputData + Define.FILE_SEPARATOR;
 								mInputData = mInputData + mAllToken;
-								CustomLog.e("Jihye", "save !!! mAllToken : " + mInputData);
+								CustomLog.e(LOG_TAG, "save !!! mAllToken : " + mInputData);
 								
-								CustomLog.d("Jihye", "mInputData end : " + mInputData);
+								CustomLog.d(LOG_TAG, "mInputData end : " + mInputData);
 								
 								PatternData resultPatternData = PatternDataParser(mInputData);
 								
@@ -165,7 +167,7 @@ public class LockTestActivity extends Activity {
 								LogDisplay("mPatternData[mPatternType] : ", mPatternData[mPatternType]);
 								
 								pattern_compare_result = mGripSensorEventManager.checkPatterData(resultPatternData, mPatternData[mPatternType]);
-								CustomLog.e("Jihye", "pattern_compare_result : " + pattern_compare_result);
+								CustomLog.e(LOG_TAG, "pattern_compare_result : " + pattern_compare_result);
 								
 								if(pattern_compare_result == true){
 									if(mPatternType == 0){
@@ -201,7 +203,7 @@ public class LockTestActivity extends Activity {
 	};
 	
 	private void LogDisplay (String msg , PatternData data){
-		CustomLog.v("Jihye", msg + "value : " + Arrays.toString(data.value) + ", hand : " + data.hand + ", power : " + Arrays.toString(data.power) 
+		CustomLog.v(LOG_TAG, msg + "value : " + Arrays.toString(data.value) + ", hand : " + data.hand + ", power : " + Arrays.toString(data.power) 
 				+ ", token : " + Arrays.toString(data.token) + ", all_token : " + data.all_token);
 	}
 	
@@ -227,9 +229,9 @@ public class LockTestActivity extends Activity {
 		settingData[1] = FileUtils.readFile(camera_data);
 		settingData[2] = FileUtils.readFile(ebook_data);
 		
-		CustomLog.d("Jihye", "init lock_data : " + settingData[0]);
-		CustomLog.d("Jihye", "init camera_data : " + settingData[1]);
-		CustomLog.d("Jihye", "init ebook_data : " + settingData[2]);
+		CustomLog.d(LOG_TAG, "init lock_data : " + settingData[0]);
+		CustomLog.d(LOG_TAG, "init camera_data : " + settingData[1]);
+		CustomLog.d(LOG_TAG, "init ebook_data : " + settingData[2]);
 		
 		for(int i=0; i < settingData.length; i++){
 			if(settingData[i] != null){
@@ -263,7 +265,7 @@ public class LockTestActivity extends Activity {
 			}
 		}
 		
-		CustomLog.d("Jihye", "result : " + "value : " + Arrays.toString(result.value) + ", hand : " + result.hand 
+		CustomLog.d(LOG_TAG, "result : " + "value : " + Arrays.toString(result.value) + ", hand : " + result.hand 
 				+ ", power : " + Arrays.toString(result.power) + ", token : " + Arrays.toString(result.token) 
 				+ ", all_token : " + result.all_token);
 		

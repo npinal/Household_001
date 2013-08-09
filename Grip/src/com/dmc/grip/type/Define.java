@@ -3,7 +3,7 @@ package com.dmc.grip.type;
 import android.os.Environment;
 
 public class Define {
-	public static Boolean DEBUG = false;
+	public static Boolean DEBUG = true;
 	
 	public static final String SETTING_SAVE_PATH = Environment.getExternalStorageDirectory() + "/Grip_Pattern/";
 	

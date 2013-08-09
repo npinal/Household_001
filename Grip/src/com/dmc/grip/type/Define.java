@@ -39,8 +39,11 @@ public class Define {
 	public static final long GRIP_THRESHOLD = 1000 * 3; 	// 3초 
 	public static final int GRIP_SETTING_THRESHOLD = 500; 	// 0.5초 
 	
-
 	public static enum HandStatus {
 		HAND_STATUS_GRIP_PUSH, HAND_STATUS_GRIP_RELEASE, HAND_STATUS_GRIP_ERROR,
+	};
+	
+	public static enum IndexShortcutPattern{
+		INDEX_NONE, INDEX_LOCK, INDEX_CAMERA, INDEX_EBOOK,
 	};
 }

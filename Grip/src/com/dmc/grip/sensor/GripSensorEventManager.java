@@ -3,6 +3,7 @@ package com.dmc.grip.sensor;
 import com.dmc.grip.data.GripSensorDataApi;
 import com.dmc.grip.data.OnSensorDataListner;
 import com.dmc.grip.data.SensorDataEvent;
+import com.dmc.grip.utils.PrintUtils;
 
 import android.content.Context;
 import android.hardware.contextaware.ContextAwareConstants;
@@ -19,11 +20,14 @@ public class GripSensorEventManager {
 	private GripSensorDataApi mGripSensorDataApi;
 	private boolean isStop = false;
 	private int[] mGripData;
+	private int[] mLibGripData;
 	public OnSensorDataListner mSensorDataListner = null;
 
 	public GripSensorEventManager(Context context) {
 		// TODO Auto-generated constructor stub
 
+		mGripData = new int[30];
+		mLibGripData = new int[30];
 		mGripSensorDataApi = new GripSensorDataApi();
 
 		mContextAwareManager = (ContextAwareManager) context
@@ -42,26 +46,33 @@ public class GripSensorEventManager {
 			if (type == ContextAwareManager.GRIP_SENSOR_SERVICE) {
 				// TODO : receive the context
 
-				mGripData = context.getIntArray("Grip");
+				for (int i = 0 ; i < mLibGripData.length ; i++){
+					mLibGripData[i] = 0;
+				}
+				
+				mLibGripData = context.getIntArray("Grip");
+				mGripData = mLibGripData;
 
 				/*
 				 * int i = 0; for (i = 0; i < 30; i++) { Log.e(TAG, "grip [" + i
-				 * + "] = " + Integer.toHexString(grip[i])); }
+				 * + "] = " + Integer.toHexString(mLibGripData[i])); }
 				 */
 
 				/*
-				 * int count = 0; for(int i : grip){
+				 * int count = 0; for(int i : mLibGripData){
 				 * //str.append(Integer.toString(i) + ", ");
-				 * printBit(grip[count]); count++; }
+				 * printBit(mLibGripData[count]); count++; }
 				 */
-
-				/*
-				 * Log.e(TAG, "START"); printBit(mGripData[0]);
-				 * printBit(mGripData[1]); printBit(mGripData[2]);
-				 * printBit(mGripData[3]); printBit(mGripData[4]); Log.e(TAG,
-				 * "END");
-				 */
-
+/*
+				Log.e(TAG, "START");
+				PrintUtils.printBit("org", mLibGripData[0]);
+				PrintUtils.printBit("org", mLibGripData[1]);
+				PrintUtils.printBit("org", mLibGripData[2]);
+				PrintUtils.printBit("org", mLibGripData[3]);
+				PrintUtils.printBit("org", mLibGripData[4]);
+				Log.e(TAG, "END");
+*/
+				//PrintUtils.printBit("org", mLibGripData[0]);						
 			}
 		}
 	};
@@ -79,17 +90,19 @@ public class GripSensorEventManager {
 								.getSensorHand(), mGripSensorDataApi
 								.getSensorPower(), mGripSensorDataApi
 								.getSensorResult()));
+				
+				mGripSensorDataApi.clearSensorData();
 			} else
 				return;
 		}
 	};
 
-	public void registerCALstner(){
+	public void registerCALstner() {
 		Log.e(TAG, "registerCAListner!");
 		mContextAwareManager.registerListener(mCAListener,
 				ContextAwareManager.GRIP_SENSOR_SERVICE);
 	}
-	
+
 	public void unregisterCAListener() {
 		if (mContextAwareManager != null) {
 			Log.e(TAG, "unregisterCALListner!");
@@ -97,10 +110,10 @@ public class GripSensorEventManager {
 					ContextAwareManager.GRIP_SENSOR_SERVICE);
 		}
 	}
-	
-	public void setOnSensorDataListner(OnSensorDataListner sl){
+
+	public void setOnSensorDataListner(OnSensorDataListner sl) {
 		mSensorDataListner = sl;
-		
+
 		if (sl != null)
 			collectSensorDataHandler.sendEmptyMessage(1000);
 	}
@@ -108,5 +121,22 @@ public class GripSensorEventManager {
 	public void removeCollectSensorDataHandler() {
 		collectSensorDataHandler.removeMessages(0);
 		isStop = true;
+	}
+	
+	public boolean compareSensorValue(int maxCompareCount, final int[] gripOrg, final int[]gripTmp){	
+		boolean result = true;
+		int wrongCount = 0;
+
+		
+		for (int i = 0 ; i < gripOrg.length ; i++){
+			if (gripOrg[i] != gripTmp[i]){
+				wrongCount++;
+			}
+		}
+		
+		if (wrongCount > maxCompareCount)
+			result = false;
+		
+		return result;
 	}
 }

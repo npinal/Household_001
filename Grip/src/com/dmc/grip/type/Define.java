@@ -18,8 +18,8 @@ public class Define {
 	public static final int POWER_MIDDLE = 0x00;
 	public static final int POWER_FULL = 0x20;
 
-	public static final int HAND_RIGHT = 0xC0;
-	public static final int HAND_LEFT = 0x80;
+	public static final int HAND_RIGHT = 0xC0;	// 오른손 192
+	public static final int HAND_LEFT = 0x80;	// 왼손 128 
 	public static final int HAND_NO = 0x00;
 	public static final int HAND_IMPOSSIBLE = 0x40;
 

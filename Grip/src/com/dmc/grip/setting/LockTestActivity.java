@@ -1,11 +1,14 @@
 package com.dmc.grip.setting;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.app.Activity;
+import android.content.Intent;
 
 import com.dmc.grip.R;
 import com.dmc.grip.data.OnSensorDataListner;
@@ -83,9 +86,17 @@ public class LockTestActivity extends Activity {
 						}
 						
 						if(compareResult == true){
-							mInputData = mInputData + Arrays.toString(sensorData.mValue);
+//							mInputData = mInputData + Arrays.toString(sensorData.mValue);
+							for(int i=0; i < sensorData.mValue.length; i++){
+								mInputData = mInputData + sensorData.mValue[i];
+								if(i != sensorData.mValue.length-1){
+									mInputData = mInputData + ",";
+								}
+							}
 							mInputData = mInputData + Define.FILE_SEPARATOR;
 							mInputData = mInputData + sensorData.mHand;
+							
+							Log.e("Jihye", "save !!! value : " + mInputData);
 						}
 					}
 				}
@@ -111,42 +122,94 @@ public class LockTestActivity extends Activity {
 					else{
 						mAfterPower = power;
 						
+						Log.e("Jihye", "mBeforePower : " + mBeforePower + ", mAfterPower : " + mAfterPower);
+						
 						if(mBeforePower != mAfterPower){
+							Log.e("Jihye", "save !!! mBeforePower != mAfterPower");
 							mInputData = mInputData + Define.FILE_SEPARATOR;
 							mInputData = mInputData + mBeforePower;
 							mInputData = mInputData + Define.FILE_SEPARATOR;
 							mInputData = mInputData + mToken;
+							Log.e("Jihye", "save !!! mBeforePower != mAfterPower : " + mInputData);
 							
 							mAllToken = mAllToken + 1;
 							mToken = 1;
 							mTime = Define.GRIP_SETTING_THRESHOLD;
 						}
 						else{
-							if(mTime >= Define.GRIP_THRESHOLD){
-								mTime = 0;
-								mToken = mToken + 1;
-								mAllToken = mAllToken + 1;
+							if(mAllToken < mPatternData[mPatternType].all_token){
+								if(mTime >= Define.GRIP_THRESHOLD){
+									mTime = 0;
+									mToken = mToken + 1;
+									mAllToken = mAllToken + 1;
+									
+								}
+							}
+							else{
+								if(mTime > 0){
+									if(mToken == 0){
+										mToken = mToken + 1;
+									}
+									mInputData = mInputData + Define.FILE_SEPARATOR;
+									mInputData = mInputData + mBeforePower;
+									mInputData = mInputData + Define.FILE_SEPARATOR;
+									mInputData = mInputData + mToken;
+									Log.e("Jihye", "save !!! mTime > 0 mInputData : " + mInputData);
+									
+//									mAllToken = mAllToken + 1;
+								}
+								
+								mInputData = mInputData + Define.FILE_SEPARATOR;
+								mInputData = mInputData + mAllToken;
+								Log.e("Jihye", "save !!! mAllToken : " + mInputData);
+								
+								Log.d("Jihye", "mInputData end : " + mInputData);
+								
+								PatternData resultPatternData = PatternDataParser(mInputData);
+								
+								Boolean pattern_compare_result = false;
+								pattern_compare_result = mGripSensorEventManager.checkPatterData(resultPatternData, mPatternData[mPatternType]);
+								Log.e("Jihye", "pattern_compare_result : " + pattern_compare_result);
+								LogDisplay("inputData : ", resultPatternData);
+								LogDisplay("mPatternData[mPatternType] : ", mPatternData[mPatternType]);
+								
+								if(pattern_compare_result == true){
+									if(mPatternType == 0){
+										// lock
+										finish();
+									}
+									else if(mPatternType == 1){
+										// camera
+										Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+										startActivity(cameraIntent);
+										finish();
+										
+									}
+									else if(mPatternType == 2){
+										// ebook
+										Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage("com.google.android.apps.books");
+										startActivity(intent);
+										finish();
+									}
+								}
+								else{
+									resetData();
+								}
 							}
 						}
 					}
 					
 					mBeforePower = mAfterPower;
-					
-					if(mAllToken >= mPatternData[mPatternType].all_token){
-						Boolean pattern_compare_result = false;
-						// 특정함수. 패턴 피교 
-						if(pattern_compare_result == true){
-							// intent 실행 
-						}
-						else{
-//							resetData();
-						}
-					}
 				}
 				
 			}
 		}
 	};
+	
+	private void LogDisplay (String msg , PatternData data){
+		Log.v("Jihye", msg + "value : " + Arrays.toString(data.value) + ", hand : " + data.hand + ", power : " + Arrays.toString(data.power) 
+				+ ", token : " + Arrays.toString(data.token) + ", all_token : " + data.all_token);
+	}
 	
 	
 	private void resetData(){

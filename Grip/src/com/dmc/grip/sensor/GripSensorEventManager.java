@@ -4,6 +4,8 @@ import com.dmc.grip.data.GripSensorDataApi;
 import com.dmc.grip.data.OnSensorDataListner;
 import com.dmc.grip.data.PatternData;
 import com.dmc.grip.data.SensorDataEvent;
+import com.dmc.grip.utils.PrintUtils;
+
 import android.content.Context;
 import android.hardware.contextaware.ContextAwareConstants;
 import android.hardware.contextaware.ContextAwareManager;
@@ -45,10 +47,10 @@ public class GripSensorEventManager {
 			if (type == ContextAwareManager.GRIP_SENSOR_SERVICE) {
 				// TODO : receive the context
 
-				for (int i = 0 ; i < mLibGripData.length ; i++){
+				for (int i = 0; i < mLibGripData.length; i++) {
 					mLibGripData[i] = 0;
 				}
-				
+
 				mLibGripData = context.getIntArray("Grip");
 				mGripData = mLibGripData;
 
@@ -62,16 +64,16 @@ public class GripSensorEventManager {
 				 * //str.append(Integer.toString(i) + ", ");
 				 * printBit(mLibGripData[count]); count++; }
 				 */
-/*
-				Log.e(TAG, "START");
-				PrintUtils.printBit("org", mLibGripData[0]);
-				PrintUtils.printBit("org", mLibGripData[1]);
-				PrintUtils.printBit("org", mLibGripData[2]);
-				PrintUtils.printBit("org", mLibGripData[3]);
-				PrintUtils.printBit("org", mLibGripData[4]);
-				Log.e(TAG, "END");
-*/
-				//PrintUtils.printBit("org", mLibGripData[0]);						
+				/*
+				 * Log.e(TAG, "START"); PrintUtils.printBit("org",
+				 * mLibGripData[0]); PrintUtils.printBit("org",
+				 * mLibGripData[1]); PrintUtils.printBit("org",
+				 * mLibGripData[2]); PrintUtils.printBit("org",
+				 * mLibGripData[3]); PrintUtils.printBit("org",
+				 * mLibGripData[4]); Log.e(TAG, "END");
+				 */
+				Log.e(TAG, "power x = " + mLibGripData[0]);
+				PrintUtils.printBit("power b = ", mLibGripData[0]);
 			}
 		}
 	};
@@ -89,7 +91,7 @@ public class GripSensorEventManager {
 								.getSensorHand(), mGripSensorDataApi
 								.getSensorPower(), mGripSensorDataApi
 								.getSensorResult()));
-				
+
 				mGripSensorDataApi.clearSensorData();
 			} else
 				return;
@@ -121,54 +123,59 @@ public class GripSensorEventManager {
 		collectSensorDataHandler.removeMessages(0);
 		isStop = true;
 	}
-	
-	public boolean compareSensorValue(int maxCompareCount, final int[] gripOrg, final int[]gripTmp){	
+
+	public boolean compareSensorValue(int maxCompareCount, final int[] gripOrg,
+			final int[] gripTmp) {
 		boolean result = true;
 		int wrongCount = 0;
-		
-		for (int i = 0 ; i < gripOrg.length ; i++){
-			if (gripOrg[i] != gripTmp[i]){
+
+		for (int i = 0; i < gripOrg.length; i++) {
+			if (gripOrg[i] != gripTmp[i]) {
 				wrongCount++;
 			}
 		}
-		
+
 		if (wrongCount > maxCompareCount)
 			result = false;
-		
+
 		return result;
 	}
-	
-public boolean checkPatterData(PatternData patternData, PatternData savedPatternData){	
+
+	public boolean checkPatterData(PatternData patternData,
+			PatternData savedPatternData) {
 		boolean result = true;
-		
-		//---	Sensor All Token Check
-		if (patternData.all_token != savedPatternData.all_token){
+
+		// --- Sensor All Token Check
+		if (patternData.all_token != savedPatternData.all_token) {
 			result = false;
 			return result;
 		}
-				
-		//---	Sensor Hand Check
-		if (patternData.hand != savedPatternData.hand){
+
+		// --- Sensor Hand Check
+		if (patternData.hand != savedPatternData.hand) {
 			result = false;
 			return result;
 		}
-		
-		//---	Sensor Power Check
-		for (int i = 0 ; i < savedPatternData.power.length; i++){
-			if (savedPatternData.power[i] != patternData.power[i]){
+
+		// --- Sensor Power Check
+		for (int i = 0; i < savedPatternData.power.length; i++) {
+			if (savedPatternData.power[i] != patternData.power[i]) {
 				result = false;
 				return result;
 			}
 		}
-		
-		//---	Sensor Token Check
-		for (int i = 0 ; i < patternData.token.length; i++){
-			if (savedPatternData.token[i] != patternData.token[i]){
+
+		// --- Sensor Token Check
+		if (savedPatternData.token.length != patternData.token.length)
+			return result;
+			
+		for (int i = 0; i < patternData.token.length; i++) {
+			if (savedPatternData.token[i] != patternData.token[i]) {
 				result = false;
 				return result;
 			}
 		}
-	
+
 		return result;
 	}
 }

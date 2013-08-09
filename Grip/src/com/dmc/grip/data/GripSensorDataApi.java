@@ -12,14 +12,17 @@ public class GripSensorDataApi {
 	private HandStatus mSensorDriveStatus = HandStatus.HAND_STATUS_GRIP_RELEASE;
 
 	private GripSensorData mGripSensorData;
-	private static int mFirstHand;
-	private static int firstTouch = 0;
+	private int mFirstHand;
+	private int firstTouch = 0;
+	protected int[] mFistGripSensorDataValue;
 
 	public GripSensorDataApi() {
 		// TODO Auto-generated constructor stub
 		mGripSensorData = new GripSensorData();
 		mGripSensorData.mValue = new int[30];
 		mGripSensorData.mResult = true;
+
+		mFistGripSensorDataValue = new int[30];
 	}
 
 	public int[] getSersorValue() {
@@ -40,17 +43,30 @@ public class GripSensorDataApi {
 
 	private boolean getCheckChangedFinger(int maxCount, GripSensorData grip) {
 		boolean result = true;
+		int wrongCountNum = 0;
 
 		if (grip == null)
 			return true;
 
 		// Log.e(TAG, "old = " + mOldGripSensorData.mHand + "new = " +
 		// grip.mHand);
-		
+
 		if (getSensorDriveStatus() == HandStatus.HAND_STATUS_GRIP_PUSH) {
 			if (grip.mHand != mFirstHand) {
 				result = false;
 			}
+
+			for (int i = 0; i < mGripSensorData.mValue.length; i++) {
+				if (mFistGripSensorDataValue[i] != mGripSensorData.mValue[i]) {
+					wrongCountNum++;
+				}
+			}
+		}
+
+		Log.e(TAG, "wrongCount = " + wrongCountNum);
+
+		if (wrongCountNum > maxCount) {
+			result = false;
 		}
 
 		return result;
@@ -131,7 +147,7 @@ public class GripSensorDataApi {
 		 */
 
 		mGripSensorData.mHand = grip[0] & Define.MASK_BIT_HAND;
-		//PrintUtils.printBit("hand", mGripSensorData.mHand);
+		// PrintUtils.printBit("hand", mGripSensorData.mHand);
 
 		mGripSensorData.mPower = grip[0] & Define.MASK_BIT_POWER;
 		// PrintUtils.printBit("power", mGripSensorData.mPower);
@@ -141,14 +157,23 @@ public class GripSensorDataApi {
 					Define.WRONG_MAX_COUNT, mGripSensorData);
 		}
 
-		//Log.e(TAG, "handResult = " + mGripSensorData.mResult);
+		Log.e(TAG, "handResult = " + mGripSensorData.mResult);
 
 		if (mGripSensorData.mResult == false)
 			firstTouch = 0;
 
 		if (firstTouch == 0
 				&& (getSensorDriveStatus() == HandStatus.HAND_STATUS_GRIP_PUSH)) {
+			Log.e(TAG, "FirstTouched!!!");
+			
+			// --- 최초 인식된 hand값 저장
 			mFirstHand = mGripSensorData.mHand;
+
+			// --- 최초 인식된 SensorVale값 저장
+			for (int i = 0; i < mGripSensorData.mValue.length; i++) {
+				mFistGripSensorDataValue[i] = mGripSensorData.mValue[i];
+			}
+
 			firstTouch = 1;
 		}
 	}

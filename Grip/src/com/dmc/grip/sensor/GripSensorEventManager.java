@@ -2,9 +2,8 @@ package com.dmc.grip.sensor;
 
 import com.dmc.grip.data.GripSensorDataApi;
 import com.dmc.grip.data.OnSensorDataListner;
+import com.dmc.grip.data.PatternData;
 import com.dmc.grip.data.SensorDataEvent;
-import com.dmc.grip.utils.PrintUtils;
-
 import android.content.Context;
 import android.hardware.contextaware.ContextAwareConstants;
 import android.hardware.contextaware.ContextAwareManager;
@@ -126,7 +125,6 @@ public class GripSensorEventManager {
 	public boolean compareSensorValue(int maxCompareCount, final int[] gripOrg, final int[]gripTmp){	
 		boolean result = true;
 		int wrongCount = 0;
-
 		
 		for (int i = 0 ; i < gripOrg.length ; i++){
 			if (gripOrg[i] != gripTmp[i]){
@@ -137,6 +135,73 @@ public class GripSensorEventManager {
 		if (wrongCount > maxCompareCount)
 			result = false;
 		
+		return result;
+	}
+	
+public boolean checkPatterData(PatternData patternData, PatternData savedPatternData){	
+		boolean result = true;
+		
+		/*
+		PatternData patterData = new PatternData();
+		patterData.hand = Define.HAND_LEFT;
+		patterData.all_token = 5;	
+		patterData.power = new int[4];
+		patterData.power[0] = 0x20;
+		patterData.power[1] = 0x00;
+		patterData.power[2] = 0x20;
+		patterData.power[3] = 0x00;		
+		
+		patterData.token = new int [4];
+		patterData.token[0] = 2;
+		patterData.token[1] = 1;
+		patterData.token[2] = 1;
+		patterData.token[3] = 1;
+		
+	
+		PatternData savedPatternData = new PatternData();
+		savedPatternData.hand = Define.HAND_LEFT;
+		savedPatternData.all_token = 5;	
+		savedPatternData.power = new int[4];
+		savedPatternData.power[0] = 0x20;
+		savedPatternData.power[1] = 0x00;
+		savedPatternData.power[2] = 0x20;
+		savedPatternData.power[3] = 0x00;
+			
+		savedPatternData.token = new int [4];
+		savedPatternData.token[0] = 2;
+		savedPatternData.token[1] = 1;
+		savedPatternData.token[2] = 1;
+		savedPatternData.token[3] = 1;
+		*/
+		
+		//---	Sensor All Token Check
+		if (patternData.all_token != savedPatternData.all_token){
+			result = false;
+			return result;
+		}
+				
+		//---	Sensor Hand Check
+		if (patternData.hand != savedPatternData.hand){
+			result = false;
+			return result;
+		}
+		
+		//---	Sensor Power Check
+		for (int i = 0 ; i < savedPatternData.power.length; i++){
+			if (savedPatternData.power[i] != patternData.power[i]){
+				result = false;
+				return result;
+			}
+		}
+		
+		//---	Sensor Token Check
+		for (int i = 0 ; i < patternData.token.length; i++){
+			if (savedPatternData.token[i] != patternData.token[i]){
+				result = false;
+				return result;
+			}
+		}
+	
 		return result;
 	}
 }

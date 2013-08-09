@@ -17,8 +17,8 @@
 	<string name="setting_grip_touch_summary">손으로 디바이스를 잡는 자세와 세기에 따라 디바이스를 제어합니다.</string>
 	
 	<!-- 락 테스트 -->
-	<string name="setting_lock_test_title">화면잠금테스트</string>
-	<string name="setting_lock_test_summary">그립으로 화면을 잠금해제를 테스트합니다.</string>
+	<string name="setting_lock_test_title">화면잠금 후 테스트</string>
+	<string name="setting_lock_test_summary">그립으로 설정된 패턴을 테스트합니다.</string>
 	
 	<!-- 빠른실행 -->
 	<string name="setting_quick_run_title">빠른 실행</string>

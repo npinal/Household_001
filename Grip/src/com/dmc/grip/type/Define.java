@@ -34,7 +34,7 @@ public class Define {
 	public static final int HAND_STATUS_GRIP_RELEASE = 0x03;	
 	public static final int HAND_STATUS_GRIP_ERROR = 0x04;
 	
-	public static final long GRIP_REGIST_TIMEOUT = 1000 * 10;	// 10초
+	public static final long GRIP_REGIST_TIMEOUT = 1000 * 60;	// 1분
 	
 	public static final long GRIP_THRESHOLD = 1000 * 3; 	// 3초 
 	public static final int GRIP_SETTING_THRESHOLD = 500; 	// 0.5초 

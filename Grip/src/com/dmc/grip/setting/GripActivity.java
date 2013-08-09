@@ -218,6 +218,7 @@ public class GripActivity extends Activity {
 		int beforePower = -1;
 		int afterPower = -1;
 		int time = 0;
+		int all_token = 0;
 		
 		File file = new File(mSaveSettingPath);
 		if (file != null && file.exists()) {
@@ -257,6 +258,7 @@ public class GripActivity extends Activity {
 								accrue = accrue + Define.FILE_SEPARATOR;
 								accrue = accrue + token;
 								
+								all_token = all_token + token;
 								token = 1;
 								time = Define.GRIP_SETTING_THRESHOLD;
 							}
@@ -281,7 +283,12 @@ public class GripActivity extends Activity {
 					accrue = accrue + beforePower;
 					accrue = accrue + Define.FILE_SEPARATOR;
 					accrue = accrue + token;
+					
+					all_token = all_token + token;
 				}
+				
+				accrue = accrue + Define.FILE_SEPARATOR;
+				accrue = accrue + all_token;
 				
 				Log.d("Jihye", "PatternFileSave : " + accrue);
 				

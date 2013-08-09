@@ -1,10 +1,14 @@
 package com.dmc.grip.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+
+import com.dmc.grip.type.Define;
 
 import android.R.bool;
 import android.util.Log;
@@ -189,6 +193,30 @@ public class FileUtils {
      * 파일 읽어 오기 
      * @param file
      */
+    public static final String readFile(File file){
+        String result = "";
+        if(file!=null&&file.exists()){
+            try {
+                FileInputStream fis = new FileInputStream(file);
+				BufferedReader br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					StringBuilder sb = new StringBuilder();
+					sb.append(line);
+					result = result + sb.toString();
+				}
+				fis.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if(result.equals("")){
+        	return null;
+        }
+        return result;
+    }
+    /*
     public static final void readFile(File file){
         int readcount=0;
         if(file!=null&&file.exists()){
@@ -205,7 +233,7 @@ public class FileUtils {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
      
     /**
      * 파일 복사

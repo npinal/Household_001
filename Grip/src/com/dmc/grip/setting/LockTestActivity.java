@@ -28,10 +28,10 @@ public class LockTestActivity extends Activity {
 	int mPatternType;
 	
 	int mTime = 0;
-	int mToken = 0;
+	int mToken = 1;
 	int mBeforePower = -1;
 	int mAfterPower = -1;
-	int mAllToken = 0;
+	int mAllToken = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,6 @@ public class LockTestActivity extends Activity {
 						}
 						
 						if(compareResult == true){
-//							mInputData = mInputData + Arrays.toString(sensorData.mValue);
 							for(int i=0; i < sensorData.mValue.length; i++){
 								mInputData = mInputData + sensorData.mValue[i];
 								if(i != sensorData.mValue.length-1){
@@ -103,21 +102,13 @@ public class LockTestActivity extends Activity {
 				else{
 					int power = sensorData.mPower;
 					
-					/*
-					if(power == Define.POWER_FULL){
-						Boolean compareResult = false;
-						compareResult = mGripSensorEventManager.compareSensorValue(Define.WRONG_MAX_COUNT, mInputDataValue, sensorData.mValue);
-						
-						if(compareResult == false){
-							resetData();
-						}
-					}*/
-
 					mTime = mTime + Define.GRIP_SETTING_THRESHOLD;
 					if(mBeforePower == -1){
 						mBeforePower = power;
 						mAfterPower = power;
 						mTime = Define.GRIP_SETTING_THRESHOLD;
+						mToken = 1;
+						mAllToken = 1;
 					}
 					else{
 						mAfterPower = power;
@@ -125,14 +116,15 @@ public class LockTestActivity extends Activity {
 						Log.e("Jihye", "mBeforePower : " + mBeforePower + ", mAfterPower : " + mAfterPower);
 						
 						if(mBeforePower != mAfterPower){
-							Log.e("Jihye", "save !!! mBeforePower != mAfterPower");
 							mInputData = mInputData + Define.FILE_SEPARATOR;
 							mInputData = mInputData + mBeforePower;
 							mInputData = mInputData + Define.FILE_SEPARATOR;
 							mInputData = mInputData + mToken;
-							Log.e("Jihye", "save !!! mBeforePower != mAfterPower : " + mInputData);
 							
 							mAllToken = mAllToken + 1;
+							
+							Log.e("Jihye", "save !!! mBeforePower != mAfterPower : " + mInputData);
+							
 							mToken = 1;
 							mTime = Define.GRIP_SETTING_THRESHOLD;
 						}
@@ -168,10 +160,11 @@ public class LockTestActivity extends Activity {
 								PatternData resultPatternData = PatternDataParser(mInputData);
 								
 								Boolean pattern_compare_result = false;
-								pattern_compare_result = mGripSensorEventManager.checkPatterData(resultPatternData, mPatternData[mPatternType]);
-								Log.e("Jihye", "pattern_compare_result : " + pattern_compare_result);
 								LogDisplay("inputData : ", resultPatternData);
 								LogDisplay("mPatternData[mPatternType] : ", mPatternData[mPatternType]);
+								
+								pattern_compare_result = mGripSensorEventManager.checkPatterData(resultPatternData, mPatternData[mPatternType]);
+								Log.e("Jihye", "pattern_compare_result : " + pattern_compare_result);
 								
 								if(pattern_compare_result == true){
 									if(mPatternType == 0){
@@ -215,10 +208,10 @@ public class LockTestActivity extends Activity {
 	private void resetData(){
 		mInputData = "";
 		mTime = 0;
-		mToken = 0;
+		mToken = 1;
 		mBeforePower = -1;
 		mAfterPower = -1;
-		mAllToken = 0;
+		mAllToken = 1;
 	}
 	
 	private void init(){

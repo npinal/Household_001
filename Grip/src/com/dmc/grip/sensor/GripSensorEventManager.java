@@ -72,8 +72,8 @@ public class GripSensorEventManager {
 				 * mLibGripData[3]); PrintUtils.printBit("org",
 				 * mLibGripData[4]); Log.e(TAG, "END");
 				 */
-				Log.e(TAG, "power x = " + mLibGripData[0]);
-				PrintUtils.printBit("power b = ", mLibGripData[0]);
+				//Log.e(TAG, "power x = " + mLibGripData[0]);
+				//PrintUtils.printBit("power b = ", mLibGripData[0]);
 			}
 		}
 	};

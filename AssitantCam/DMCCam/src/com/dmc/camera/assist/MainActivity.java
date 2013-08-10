@@ -77,7 +77,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		ImageButton mainShutterButton = (ImageButton) findViewById(R.id.mainShutterButton);
 		mainShutterButton.setOnClickListener(this);
-		mainSettingButton.setEnabled(false);
 
 		OrientationEventListener oel = new OrientationEventListener(this) {
 			int mOrientation = OrientationEventListener.ORIENTATION_UNKNOWN;

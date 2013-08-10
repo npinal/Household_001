@@ -15,6 +15,7 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.ShutterCallback;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -23,6 +24,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.dmc.camera.gallery.PhotoViewActivity;
 import com.dmc.camera.lib.FaceDetector;
 import com.dmc.camera.lib.FaceROI;
 import com.dmc.camera.provider.DBApi;
@@ -316,6 +318,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 							ACVoicePlayer.GetInstance().StopRec();
 							startRecoderHandler.sendEmptyMessage(0);
 						}
+						else{
+							Message msg = new Message();
+							Bundle b = new Bundle();
+							b.putString(PhotoViewActivity.PHOTO_PATH, fileName);
+							b.putInt(PhotoViewActivity.VIEW_MODE, PhotoViewActivity.PHOTO_VIEW_MODE_SHOT);
+							msg.setData(b);
+							mShotViewHandler.handleMessage(msg);
+						}
 
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -451,5 +461,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	 * new Paint(Paint.ANTI_ALIAS_FLAG);; paint.setColor(Color.GREEN);
 	 * paint.setStrokeWidth(3); canvas.drawLine(0, 110, 200, 110,paint); }
 	 */
+	
+	Handler mShotViewHandler = new Handler(){
+		public void handleMessage(android.os.Message msg) {
+			Intent intent = new Intent(mContext, PhotoViewActivity.class);
+			intent.putExtras(msg.getData());
+			mContext.startActivity(intent);
+		};
+	};
 
 }

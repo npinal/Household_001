@@ -25,22 +25,25 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.dmc.camera.Global;
 import com.dmc.camera.gallery.PhotoViewActivity;
 import com.dmc.camera.lib.FaceDetector;
 import com.dmc.camera.lib.FaceROI;
 import com.dmc.camera.provider.DBApi;
 import com.dmc.camera.provider.SettingDefine;
-import com.dmc.camera.util.Utils;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private final static String TAG = "Preview";
-	private final String savePath = "/sdcard/DCIM/Assistant_Camera";
+//	private final String savePath = "/sdcard/DCIM/Assistant_Camera";
+	private String savePath;
 	private int mCameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 
 	private CameraSettings mCameraSettings = null;
 	private SurfaceHolder mHolder = null;
 	private Camera mCamera = null;
 	private Context mContext = null;
+	
+	private Global mGlobal;
 
 	// --- -- After Edittest : 아래의 값들은 추후 DB에서 읽어서 setPreviewSize에 넣어야 한다. 현재는
 	// DB에 읽는 부분이 업
@@ -109,7 +112,10 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private void init(Context context) {
 		Log.e(TAG, "init!!");
 		this.setWillNotDraw(false);
-
+		
+		mGlobal = (Global) context.getApplicationContext();
+		savePath = mGlobal.getPhotoPath();
+		
 		int myDevice = Util.getMyDevice();
 
 		if (myDevice == Util.DEVICE_GALAXY_S4)
@@ -342,29 +348,25 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 					try {
 						File file = new File(savePath);
 						if (!file.isDirectory()) {
-							file.mkdir();
+							file.mkdirs();
 						}
 						// Write to SD Card
 						mCurrentTime = System.currentTimeMillis();
-						String fileName = String.format(savePath + "/%d.jpg",
-								mCurrentTime);
-						outStream = new FileOutputStream(fileName);
+						
+//						String fileName = String.format(savePath + "/%d.jpg", mCurrentTime);
+						String fileName = Long.toString(mCurrentTime);
+						String filePath = String.format(savePath + "%s.jpg", mCurrentTime);
+						
+						outStream = new FileOutputStream(filePath);
 						outStream.write(data);
 						outStream.close();
 						Log.d(TAG, "onPictureTaken - wrote bytes: "
 								+ data.length);
-						if (mShotMode
-								.matches(SettingDefine.SHOT_MODE_SOUND_SHOT)) {
+						if (mShotMode.matches(SettingDefine.SHOT_MODE_SOUND_SHOT)) {
 							ACVoicePlayer.GetInstance().StopRec();
 							startRecoderHandler.sendEmptyMessage(0);
-						} else {
-							Message msg = new Message();
-							Bundle b = new Bundle();
-							b.putString(PhotoViewActivity.PHOTO_PATH, fileName);
-							b.putInt(PhotoViewActivity.VIEW_MODE,
-									PhotoViewActivity.PHOTO_VIEW_MODE_SHOT);
-							msg.setData(b);
-							mShotViewHandler.handleMessage(msg);
+						} else if(mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT) || mShotMode.matches(SettingDefine.SHOT_MODE_NORMAL)){
+							startShotView(SettingDefine.SHOT_MODE_NORMAL, fileName);
 						}
 
 					} catch (FileNotFoundException e) {
@@ -502,6 +504,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	 * paint.setStrokeWidth(3); canvas.drawLine(0, 110, 200, 110,paint); }
 	 */
 
+	public void startShotView(String shot_mode, String photo_name){
+		Message msg = new Message();
+		Bundle b = new Bundle();
+		b.putString(PhotoViewActivity.PHOTO_PATH, photo_name);
+		b.putInt(PhotoViewActivity.VIEW_MODE,
+				PhotoViewActivity.PHOTO_VIEW_MODE_SHOT);
+		msg.setData(b);
+		mShotViewHandler.handleMessage(msg);
+	}
+	
 	Handler mShotViewHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			Intent intent = new Intent(mContext, PhotoViewActivity.class);

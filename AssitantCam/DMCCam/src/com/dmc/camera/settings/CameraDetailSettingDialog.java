@@ -88,6 +88,7 @@ public final class CameraDetailSettingDialog {
 	public void show(){
 		mDialog = new Dialog(mContext, android.R.style.Theme_Translucent_NoTitleBar);
 		mDialog.getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
+		mDialog.setCancelable(false);
 		mDialog.show();
 		mDialog.setContentView(R.layout.camera_detail_setting);
 		

@@ -132,6 +132,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		DBApi.TblSystem.putString(getContentResolver(), DBApi.TblSystem.SHOT_MODE, SettingDefine.SHOT_MODE_NORMAL);		
 		super.onDestroy();
 	}
+	
+	@Override
+	public void onBackPressed() {
+		//		super.onBackPressed();
+	}
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.mainShutterButton) {

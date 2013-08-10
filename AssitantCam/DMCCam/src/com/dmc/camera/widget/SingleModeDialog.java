@@ -43,6 +43,7 @@ public final class SingleModeDialog {
 		LinearLayout view = (LinearLayout) View.inflate(mContext, R.layout.single_mode_dialog, null);
 		
 		mDialog = new AlertDialog.Builder(mContext).setView(view).create();
+		mDialog.setCancelable(false);
 		mDialog.show();
 		mDialog.setContentView(R.layout.single_mode_dialog);
 		

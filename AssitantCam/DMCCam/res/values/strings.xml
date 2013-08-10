@@ -72,5 +72,6 @@
     <string name="gallery_photoview_detail_categoty">카테고리설정</string>
     <string name="gallery_photoview_detail_soundshot_play">사운드&amp;샷 재생</string>
     <string name="gallery_photoview_photolist">사진리스트</string>
+    <string name="gallery_photoview_share">공유</string>
 
 </resources>

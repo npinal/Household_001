@@ -195,14 +195,23 @@ public class ImageResizer extends ImageWorker {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         
+        
+        
         if(orientation == ExifInterface.ORIENTATION_ROTATE_90){
         	orientation = 90;
+        	Log.d("Jihye", "orientation : 90");
         }
         else if(orientation == ExifInterface.ORIENTATION_ROTATE_180){
         	orientation = 180;
+        	Log.d("Jihye", "orientation : 180");
         }
+       
         else if(orientation == ExifInterface.ORIENTATION_ROTATE_270){
         	orientation = 270;
+        	Log.d("Jihye", "orientation : 270");
+        }
+        else{
+        	Log.d("Jihye", "orientation : 0");
         }
         
         if(orientation != -1){

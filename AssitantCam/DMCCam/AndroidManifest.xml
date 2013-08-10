@@ -24,6 +24,7 @@
         android:protectionLevel="signature" />
 
     <application
+        android:name="com.dmc.camera.Global"
         android:allowBackup="true"
         android:debuggable="true"
         android:icon="@drawable/ic_launcher"

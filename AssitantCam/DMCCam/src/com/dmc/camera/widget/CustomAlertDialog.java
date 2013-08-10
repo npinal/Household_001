@@ -39,6 +39,7 @@ public final class CustomAlertDialog {
 		LinearLayout view = (LinearLayout) View.inflate(mContext, R.layout.custom_alert_dialog, null);
 		
 		mDialog = new AlertDialog.Builder(mContext).setView(view).create();
+		mDialog.setCancelable(false);
 		mDialog.show();
 		mDialog.setContentView(R.layout.custom_alert_dialog);
 		

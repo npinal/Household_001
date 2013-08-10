@@ -9,6 +9,7 @@ import org.apache.http.conn.ssl.AbstractVerifier;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
@@ -243,9 +244,15 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			if (mCamera != null)
 				orientation = Util.getOrientationCompensation();
 			if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL) {
-				Camera.Parameters parameters = mCamera.getParameters();
-				parameters.setRotation(90);
-				mCamera.setParameters(parameters);
+				if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)) {
+					Camera.Parameters parameters = mCamera.getParameters();
+					parameters.setRotation(270);
+					mCamera.setParameters(parameters);
+				} else {
+					Camera.Parameters parameters = mCamera.getParameters();
+					parameters.setRotation(90);
+					mCamera.setParameters(parameters);
+				}
 				Log.e(TAG, "Capture Vertical");
 			} else {
 				Camera.Parameters parameters = mCamera.getParameters();
@@ -317,12 +324,12 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 								.matches(SettingDefine.SHOT_MODE_SOUND_SHOT)) {
 							ACVoicePlayer.GetInstance().StopRec();
 							startRecoderHandler.sendEmptyMessage(0);
-						}
-						else{
+						} else {
 							Message msg = new Message();
 							Bundle b = new Bundle();
 							b.putString(PhotoViewActivity.PHOTO_PATH, fileName);
-							b.putInt(PhotoViewActivity.VIEW_MODE, PhotoViewActivity.PHOTO_VIEW_MODE_SHOT);
+							b.putInt(PhotoViewActivity.VIEW_MODE,
+									PhotoViewActivity.PHOTO_VIEW_MODE_SHOT);
 							msg.setData(b);
 							mShotViewHandler.handleMessage(msg);
 						}
@@ -461,8 +468,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	 * new Paint(Paint.ANTI_ALIAS_FLAG);; paint.setColor(Color.GREEN);
 	 * paint.setStrokeWidth(3); canvas.drawLine(0, 110, 200, 110,paint); }
 	 */
-	
-	Handler mShotViewHandler = new Handler(){
+
+	Handler mShotViewHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			Intent intent = new Intent(mContext, PhotoViewActivity.class);
 			intent.putExtras(msg.getData());

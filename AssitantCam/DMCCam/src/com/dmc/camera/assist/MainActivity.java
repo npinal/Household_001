@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -78,6 +77,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		ImageButton mainShutterButton = (ImageButton) findViewById(R.id.mainShutterButton);
 		mainShutterButton.setOnClickListener(this);
+		mainSettingButton.setEnabled(false);
 
 		OrientationEventListener oel = new OrientationEventListener(this) {
 			int mOrientation = OrientationEventListener.ORIENTATION_UNKNOWN;
@@ -111,6 +111,19 @@ public class MainActivity extends Activity implements OnClickListener {
 		};
 		oel.enable();
 		
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		ACVoicePlayer.GetInstance().StopRec();
+		super.onPause();
+	}
+	
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
 	}
 	
 	@Override

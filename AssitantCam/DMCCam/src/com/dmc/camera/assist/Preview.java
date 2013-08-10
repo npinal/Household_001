@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.http.conn.ssl.AbstractVerifier;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -13,6 +15,8 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.ShutterCallback;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -61,26 +65,29 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	// --- DB
 	private String mShotMode;
 
+	// --- 입시파일이름 (차후 삭제바람)
+	long mCurrentTime;
+
 	public Preview(Context context) {
 		super(context);
 
 		init(context);
 	}
 
-	public Preview(Context context,	CameraSettings cameraSettings) {
+	public Preview(Context context, CameraSettings cameraSettings) {
 		super(context);
 
 		mCameraSettings = cameraSettings;
 		mShotMode = DBApi.TblSystem.getString(context.getContentResolver(),
 				DBApi.TblSystem.SHOT_MODE);
 		Log.e(TAG, "mShotMode = " + mShotMode);
-	
-		if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)){
+
+		if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)) {
 			mCameraFacing = CameraInfo.CAMERA_FACING_FRONT;
 		} else {
-			mCameraFacing = CameraInfo.CAMERA_FACING_BACK;			
+			mCameraFacing = CameraInfo.CAMERA_FACING_BACK;
 		}
-			
+
 		init(context);
 	}
 
@@ -284,7 +291,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			 * Bitmap srcBitmap = Util.byteArrayToBitmap(data); Bitmap
 			 * destBitmap = Util.bitmapRotate(srcBitmap, 90); destData =
 			 * Util.bitmapToByteArray(destBitmap); } else
-			 */
+			 */;
 
 			new Thread(new Runnable() {
 				@Override
@@ -296,13 +303,19 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 							file.mkdir();
 						}
 						// Write to SD Card
+						mCurrentTime = System.currentTimeMillis();
 						String fileName = String.format(savePath + "/%d.jpg",
-								System.currentTimeMillis());
+								mCurrentTime);
 						outStream = new FileOutputStream(fileName);
 						outStream.write(data);
 						outStream.close();
 						Log.d(TAG, "onPictureTaken - wrote bytes: "
 								+ data.length);
+						if (mShotMode
+								.matches(SettingDefine.SHOT_MODE_SOUND_SHOT)) {
+							ACVoicePlayer.GetInstance().StopRec();
+							startRecoderHandler.sendEmptyMessage(0);
+						}
 
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -325,17 +338,35 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	public void cameraSwitch(int cameraInfo) {
 		int width = Util.getPreviewSizeWidth();
 		int height = Util.getPreviewSizeHeigth();
-		
-		if (cameraInfo == mCameraFacing){
+
+		if (cameraInfo == mCameraFacing) {
 			Log.e(TAG, "CameraInfo is same direction!");
 			return;
 		}
-		
+
 		mCameraFacing = cameraInfo;
 		surfaceDestroyed(mHolder);
 		surfaceCreated(mHolder);
-		surfaceChanged(mHolder, PixelFormat.TRANSLUCENT, width, height);	
+		surfaceChanged(mHolder, PixelFormat.TRANSLUCENT, width, height);
 	}
+
+	private Handler startRecoderHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			String fileName = String.format(savePath + "/%d.mp4", mCurrentTime);
+			ACVoicePlayer.GetInstance().Record(fileName);
+			stopRecoderHandler.sendEmptyMessageDelayed(0, 5000);
+		}
+	};
+
+	private Handler stopRecoderHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			String fileName = String.format(savePath + "/%d.mp4", mCurrentTime);
+			ACVoicePlayer.GetInstance().StopRec();
+
+			// --- test by hkkwon
+			// ACVoicePlayer.GetInstance().PlayRec(fileName);
+		}
+	};
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

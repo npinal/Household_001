@@ -59,7 +59,8 @@ public class Util {
 	
 	public final static int	ORIENTATION_COMPENSATAION_VERTICAL = 1;
 	public final static int	ORIENTATION_COMPENSATAION_HORIZONTAL = 91;
-	public final static int	ORIENTATION_COMPENSATAION_R_HORIZONTAL = 271;	
+	public final static int	ORIENTATION_COMPENSATAION_L_VERTICAL = 181;
+	public final static int	ORIENTATION_COMPENSATAION_L_HORIZONTAL = 271;
 	
 	//---	Intent
 	public	static final String INTENT_FLAG_SETTINGS_FLASH = "assistantcamera.flag.settings_FLASH";

@@ -240,27 +240,60 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			shotCount = 8;
 		}
 
-		for (; shotCount > 0; shotCount--) {
-			if (mCamera != null)
-				orientation = Util.getOrientationCompensation();
-			if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL) {
-				if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)) {
-					Camera.Parameters parameters = mCamera.getParameters();
-					parameters.setRotation(270);
-					mCamera.setParameters(parameters);
-				} else {
-					Camera.Parameters parameters = mCamera.getParameters();
-					parameters.setRotation(90);
-					mCamera.setParameters(parameters);
-				}
-				Log.e(TAG, "Capture Vertical");
-			} else {
-				Camera.Parameters parameters = mCamera.getParameters();
-				parameters.setRotation(0);
-				mCamera.setParameters(parameters);
-				Log.e(TAG, "Capture Horizontal");
-			}
+		if (mCamera != null)
+			orientation = Util.getOrientationCompensation();
 
+		Camera.Parameters parameters = mCamera.getParameters();
+		if (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)) {
+			switch (orientation) {
+			case Util.ORIENTATION_COMPENSATAION_VERTICAL:
+				parameters.setRotation(270);
+				break;
+			case Util.ORIENTATION_COMPENSATAION_HORIZONTAL:
+				parameters.setRotation(180);				
+				break;
+			case Util.ORIENTATION_COMPENSATAION_L_VERTICAL:
+				parameters.setRotation(90);
+				break;
+			case Util.ORIENTATION_COMPENSATAION_L_HORIZONTAL:
+				parameters.setRotation(0);
+				break;
+			default:
+				break;
+			}
+		} else {
+			switch (orientation) {
+			case Util.ORIENTATION_COMPENSATAION_VERTICAL:
+				parameters.setRotation(90);
+				break;
+			case Util.ORIENTATION_COMPENSATAION_HORIZONTAL:
+				parameters.setRotation(180);
+				break;
+			case Util.ORIENTATION_COMPENSATAION_L_VERTICAL:
+				parameters.setRotation(270);
+				break;
+			case Util.ORIENTATION_COMPENSATAION_L_HORIZONTAL:
+				parameters.setRotation(0);
+				break;
+			default:
+				break;
+			}
+		}
+		mCamera.setParameters(parameters);
+		/*
+		 * if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL) { if
+		 * (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)) {
+		 * Camera.Parameters parameters = mCamera.getParameters();
+		 * parameters.setRotation(270); mCamera.setParameters(parameters); }
+		 * else { Camera.Parameters parameters = mCamera.getParameters();
+		 * parameters.setRotation(90); mCamera.setParameters(parameters); }
+		 * Log.e(TAG, "Capture Vertical"); } else { Camera.Parameters parameters
+		 * = mCamera.getParameters(); parameters.setRotation(0);
+		 * mCamera.setParameters(parameters); Log.e(TAG, "Capture Horizontal");
+		 * }
+		 */
+
+		for (; shotCount > 0; shotCount--) {
 			mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
 
 			if (mShotMode.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {

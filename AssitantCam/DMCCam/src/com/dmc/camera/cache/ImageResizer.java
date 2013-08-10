@@ -196,9 +196,19 @@ public class ImageResizer extends ImageWorker {
         options.inJustDecodeBounds = false;
         
         if(orientation == ExifInterface.ORIENTATION_ROTATE_90){
+        	orientation = 90;
+        }
+        else if(orientation == ExifInterface.ORIENTATION_ROTATE_180){
+        	orientation = 180;
+        }
+        else if(orientation == ExifInterface.ORIENTATION_ROTATE_270){
+        	orientation = 270;
+        }
+        
+        if(orientation != -1){
         	Bitmap b = BitmapFactory.decodeFile(filename, options);
         	Matrix m = new Matrix();
-        	m.setRotate( 90, (float) b.getWidth() / 2, (float) b.getHeight() / 2 );
+        	m.setRotate( orientation, (float) b.getWidth() / 2, (float) b.getHeight() / 2 );
         	Bitmap b2 = Bitmap.createBitmap( b, 0, 0, b.getWidth(), b.getHeight(), m, true);
         	b.recycle();
         	return b2;

@@ -1,5 +1,7 @@
 package com.dmc.grip.setting;
 
+import java.io.File;
+
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -17,8 +19,15 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.dmc.grip.R;
 import com.dmc.grip.provider.DBApi;
+import com.dmc.grip.type.Define;
 
 public class GripRegister extends Activity {
+	
+	public static final int VIEW_TYPE_REGIST = 0;
+	public static final int VIEW_TYPE_REREGIST = 1;
+	public static final int VIEW_TYPE_VIEW = 2;
+	
+	public static final String VIEW_MODE = "view_mode";
 	
 	LinearLayout mRegistFirst;
 	LinearLayout mRegistMore;
@@ -32,6 +41,7 @@ public class GripRegister extends Activity {
 	Switch mActionBarSwitch;
 	
 	int mQuickRunType;
+	Boolean mViewMode = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +85,11 @@ public class GripRegister extends Activity {
 			mActionBarSwitch.setOnCheckedChangeListener(mActionCheckChange);
 			mActionBarSwitch.setChecked(DBApi.TblSystem.getBoolean(getContentResolver(), DBApi.TblSystem.QUICK_RUN_LOCK, false));
 			setEnable(mActionBarSwitch.isChecked());
+			
+			File file = new File(Define.SETTING_QUICK_LOCK);
+			if(file.isFile()){
+				mViewMode = true;
+			}
 		}
 		else if(mQuickRunType == QuickRunSetting.QUICK_RUN_CAMERA){
 			actionBar.setTitle(getString(R.string.setting_quick_run_camera_title));
@@ -82,6 +97,11 @@ public class GripRegister extends Activity {
 			mActionBarSwitch.setOnCheckedChangeListener(mActionCheckChange);
 			mActionBarSwitch.setChecked(DBApi.TblSystem.getBoolean(getContentResolver(), DBApi.TblSystem.QUICK_RUN_CAMERA, false));
 			setEnable(mActionBarSwitch.isChecked());
+			
+			File file = new File(Define.SETTING_QUICK_CAMERA);
+			if(file.isFile()){
+				mViewMode = true;
+			}
 		}
 		else {
 			actionBar.setTitle(getString(R.string.setting_quick_run_ebook_title));
@@ -89,11 +109,15 @@ public class GripRegister extends Activity {
 			mActionBarSwitch.setOnCheckedChangeListener(mActionCheckChange);
 			mActionBarSwitch.setChecked(DBApi.TblSystem.getBoolean(getContentResolver(), DBApi.TblSystem.QUICK_RUN_EBOOK, false));
 			setEnable(mActionBarSwitch.isChecked());
+			
+			File file = new File(Define.SETTING_QUICK_EBOOK);
+			if(file.isFile()){
+				mViewMode = true;
+			}
 		}
-
-		mRegistFirst.setVisibility(View.VISIBLE);
-		mRegistMore.setVisibility(View.GONE);
 		
+		setViewMode(mViewMode);
+
 	}
 	
 	OnClickListener mClick = new OnClickListener() {
@@ -104,17 +128,20 @@ public class GripRegister extends Activity {
 			if(v.getId() == R.id.btn_grip_regist){
 				Intent intent = new Intent(GripRegister.this, GripActivity.class);
 				intent.putExtra(QuickRunSetting.QUICK_TYPE, mQuickRunType);
-				startActivity(intent);
+				intent.putExtra(VIEW_MODE, false);
+				startActivityForResult(intent, VIEW_TYPE_REGIST);
 			}
 			else if(v.getId() == R.id.btn_grip_view){
 				Intent intent = new Intent(GripRegister.this, GripActivity.class);
 				intent.putExtra(QuickRunSetting.QUICK_TYPE, mQuickRunType);
-				startActivity(intent);
+				intent.putExtra(VIEW_MODE, true);
+				startActivityForResult(intent, VIEW_TYPE_VIEW);
 			}
 			else if(v.getId() == R.id.btn_grip_re_regist){
 				Intent intent = new Intent(GripRegister.this, GripActivity.class);
 				intent.putExtra(QuickRunSetting.QUICK_TYPE, mQuickRunType);
-				startActivity(intent);
+				intent.putExtra(VIEW_MODE, false);
+				startActivityForResult(intent, VIEW_TYPE_REREGIST);
 			}
 		}
 	};
@@ -145,6 +172,17 @@ public class GripRegister extends Activity {
 		mReRegist.setEnabled(enabled);
 	}
 	
+	public void setViewMode(Boolean view_mode){
+		if(view_mode == true){
+			mRegistFirst.setVisibility(View.GONE);
+			mRegistMore.setVisibility(View.VISIBLE);
+		}
+		else{
+			mRegistFirst.setVisibility(View.VISIBLE);
+			mRegistMore.setVisibility(View.GONE);
+		}
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -159,9 +197,30 @@ public class GripRegister extends Activity {
 	
 	
 	@Override
-	public void startActivityForResult(Intent intent, int requestCode) {
-		// TODO Auto-generated method stub
-		super.startActivityForResult(intent, requestCode);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		if(requestCode == VIEW_TYPE_REGIST){
+			File file = new File(Define.SETTING_QUICK_LOCK);
+			if(file.isFile()){
+				mViewMode = true;
+				setViewMode(mViewMode);
+			}
+		}
+		else if(requestCode == VIEW_TYPE_VIEW){
+			File file = new File(Define.SETTING_QUICK_CAMERA);
+			if(file.isFile()){
+				mViewMode = true;
+				setViewMode(mViewMode);
+			}
+		}
+		else if(requestCode == VIEW_TYPE_REREGIST){
+			File file = new File(Define.SETTING_QUICK_EBOOK);
+			if(file.isFile()){
+				mViewMode = true;
+				setViewMode(mViewMode);
+			}
+		}
 	}
 
 

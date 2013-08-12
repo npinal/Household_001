@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">환경설정2</string>
+    <string name="version_name">버전명 : v.1.0.2</string>
+    <string name="version_summary">그립센서의 강/약을 모두 <![CDATA["'"]]>강<![CDATA["'"]]>으로 감지하여 패턴 인식율을 높인 버전입니다.</string>
     
     
     <!-- common string -->

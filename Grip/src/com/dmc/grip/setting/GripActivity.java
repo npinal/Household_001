@@ -69,8 +69,11 @@ public class GripActivity extends Activity {
 	String mPatternSavePath;
 
 	int mQuickRunType;
+	Boolean mViewMode = false;
 	
 	Boolean mFailFlag = true;
+	
+	ArrayList<SensorDataEvent> mSensorData;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +82,28 @@ public class GripActivity extends Activity {
 		mContext = this;
 
 		setContentView(R.layout.activity_main);
+		
+		Intent intent = getIntent();
 
+		mQuickRunType = intent.getIntExtra(QuickRunSetting.QUICK_TYPE, QuickRunSetting.QUICK_RUN_LOCK);
+		mViewMode = intent.getBooleanExtra(GripRegister.VIEW_MODE, false);
+		
+		if (mQuickRunType == QuickRunSetting.QUICK_RUN_LOCK) {
+			mSaveSettingPath = Define.SETTING_QUICK_LOCK;
+			mPatternSavePath = Define.PATTERN_QUICK_LOCK;
+		} else if (mQuickRunType == QuickRunSetting.QUICK_RUN_CAMERA) {
+			mSaveSettingPath = Define.SETTING_QUICK_CAMERA;
+			mPatternSavePath = Define.PATTERN_QUICK_CAMERA;
+		} else {
+			mSaveSettingPath = Define.SETTING_QUICK_EBOOK;
+			mPatternSavePath = Define.PATTERN_QUICK_EBOOK;
+		}
+		
 		mRegistStartDialog = new AlertDialog.Builder(GripActivity.this)
 				.create();
 		mRegistStartDialog.setMessage(getBaseContext().getResources()
 				.getString(R.string.setting_grip_register_message) + 5);
 		mRegistStartDialog.setCancelable(false);
-		mRegistStartDialog.show();
 
 		mRegistOkDialog = new AlertDialog.Builder(GripActivity.this).create();
 		mRegistOkDialog.setMessage(getBaseContext().getResources().getString(
@@ -96,8 +114,15 @@ public class GripActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
+						if(mGripSensorEventManager != null){
+							mGripSensorEventManager.removeCollectSensorDataHandler();
+							mGripSensorEventManager.unregisterCAListener();
+						}
+						mViewMode = false;
+						mRegistOk.setVisibility(View.GONE);
 						mRegistOkDialog.dismiss();
-						finish();
+						fileParse(mSaveSettingPath);
+//						finish();
 					}
 				});
 		
@@ -150,26 +175,19 @@ public class GripActivity extends Activity {
 		ivList.add((ImageView) findViewById(R.id.iv29));
 		ivList.add((ImageView) findViewById(R.id.iv30));
 
-		Intent intent = getIntent();
 
-		mQuickRunType = intent.getIntExtra(QuickRunSetting.QUICK_TYPE,
-				QuickRunSetting.QUICK_RUN_LOCK);
-		if (mQuickRunType == QuickRunSetting.QUICK_RUN_LOCK) {
-			mSaveSettingPath = Define.SETTING_QUICK_LOCK;
-			mPatternSavePath = Define.PATTERN_QUICK_LOCK;
-		} else if (mQuickRunType == QuickRunSetting.QUICK_RUN_CAMERA) {
-			mSaveSettingPath = Define.SETTING_QUICK_CAMERA;
-			mPatternSavePath = Define.PATTERN_QUICK_CAMERA;
-		} else {
-			mSaveSettingPath = Define.SETTING_QUICK_EBOOK;
-			mPatternSavePath = Define.PATTERN_QUICK_EBOOK;
+		mSensorData = new ArrayList<SensorDataEvent>();
+		if(mViewMode == true){
+			mRegistOk.setVisibility(View.GONE);
+			fileParse(mSaveSettingPath);
 		}
-
-		// --- Start GripSensorEventManager
-		mGripSensorEventManager = new GripSensorEventManager(mContext);
-
-		dialogHandler.sendEmptyMessage(0);
-
+		else{
+			// --- Start GripSensorEventManager
+			mGripSensorEventManager = new GripSensorEventManager(mContext);
+			mRegistOk.setVisibility(View.VISIBLE);
+			mRegistStartDialog.show();
+			dialogHandler.sendEmptyMessage(0);
+		}
 	}
 
 	protected void onPause() {
@@ -178,8 +196,10 @@ public class GripActivity extends Activity {
 
 //		handler.removeMessages(0);
 
-		mGripSensorEventManager.removeCollectSensorDataHandler();
-		mGripSensorEventManager.unregisterCAListener();
+		if(mGripSensorEventManager != null){
+			mGripSensorEventManager.removeCollectSensorDataHandler();
+			mGripSensorEventManager.unregisterCAListener();
+		}
 	}
 
 	@Override
@@ -187,7 +207,7 @@ public class GripActivity extends Activity {
 		super.onResume();
 		Log.e(LOG_TAG, "onResume");
 
-		if (mRegistStartDialog.isShowing() == false) {
+		if (mRegistStartDialog.isShowing() == false && mGripSensorEventManager != null) {
 			mGripSensorEventManager.registerCALstner();
 			mGripSensorEventManager.setOnSensorDataListner(mSensorDataListener);
 		}
@@ -195,7 +215,6 @@ public class GripActivity extends Activity {
 	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		
 		failDialogHandler.removeMessages(GRIP_FAIL);
@@ -235,8 +254,9 @@ public class GripActivity extends Activity {
 					String[] parse = sb.toString().split(Define.FILE_SEPARATOR);
 					
 					int power = Integer.parseInt(parse[1]);
+					int hand = Integer.parseInt(parse[2]);
 
-					if(accrue.equals("") && power == Define.POWER_FULL){
+					if(accrue.equals("") && power == Define.POWER_FULL && hand != Define.HAND_NO && hand != Define.HAND_IMPOSSIBLE){
 						accrue = accrue + parse[0];
 						accrue = accrue + Define.FILE_SEPARATOR;
 						accrue = accrue + parse[2];
@@ -348,7 +368,10 @@ public class GripActivity extends Activity {
 
 					int power = Integer.parseInt(parse[1]);
 					int hand = Integer.parseInt(parse[2]);
-
+					
+					SensorDataEvent sensorDataEvent = new SensorDataEvent(value, hand, power, true);
+					mSensorData.add(sensorDataEvent);
+					
 					// CustomLog.d(LOG_TAG, "power : " + power + ", hand : " + hand);
 
 					// for(int i=0; i < parse.length; i++){
@@ -357,6 +380,7 @@ public class GripActivity extends Activity {
 					// }
 				}
 				fis.close();
+				displayDialogHandler.sendEmptyMessageDelayed(0, 500);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -503,6 +527,19 @@ public class GripActivity extends Activity {
 						value = 0xFF;
 						drawBitmap(ivList.get(i), value, type);
 					}
+					else if(value == 1 && sensorData.mPower == Define.POWER_MIDDLE){
+						if (i < 11) {
+							type = RIGHT;
+						} else if (i < 16) {
+							type = TOP;
+						} else if (i < 26) {
+							type = LEFT;
+						} else if (i < 30) {
+							type = BOTTOM;
+						}
+						value = 0x7F;
+						drawBitmap(ivList.get(i), value, type);
+					}
 					else{
 						Drawable d = ivList.get(i).getDrawable();
 						ivList.get(i).setImageBitmap(null);
@@ -573,6 +610,18 @@ public class GripActivity extends Activity {
 					mRegistFailDialog.setMessage(getString(R.string.setting_grip_regist_fail_false));
 					mRegistFailDialog.show();
 				}
+			}
+		}
+	};
+	
+	private Handler displayDialogHandler = new Handler(){
+		public void handleMessage(Message msg) {
+			if(msg.what < mSensorData.size()){
+				mSensorDataListener.OnSensorDataListner(mSensorData.get(msg.what));
+				displayDialogHandler.sendEmptyMessageDelayed(msg.what + 1, 500);
+			}
+			else{
+				finish();
 			}
 		}
 	};

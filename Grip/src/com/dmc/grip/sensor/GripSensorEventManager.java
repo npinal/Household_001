@@ -144,6 +144,10 @@ public class GripSensorEventManager {
 	public boolean checkPatterData(PatternData patternData,
 			PatternData savedPatternData) {
 		boolean result = true;
+		
+		// --- Sensor Token Check
+		if (savedPatternData.token.length != patternData.token.length)
+			return result;
 
 		// --- Sensor All Token Check
 		if (patternData.all_token != savedPatternData.all_token) {
@@ -165,10 +169,6 @@ public class GripSensorEventManager {
 			}
 		}
 
-		// --- Sensor Token Check
-		if (savedPatternData.token.length != patternData.token.length)
-			return result;
-			
 		for (int i = 0; i < patternData.token.length; i++) {
 			if (savedPatternData.token[i] != patternData.token[i]) {
 				result = false;

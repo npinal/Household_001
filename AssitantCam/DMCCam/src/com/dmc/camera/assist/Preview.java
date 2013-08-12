@@ -34,7 +34,7 @@ import com.dmc.camera.provider.SettingDefine;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private final static String TAG = "Preview";
-//	private final String savePath = "/sdcard/DCIM/Assistant_Camera";
+	// private final String savePath = "/sdcard/DCIM/Assistant_Camera";
 	private String savePath;
 	private int mCameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 
@@ -42,7 +42,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private SurfaceHolder mHolder = null;
 	private Camera mCamera = null;
 	private Context mContext = null;
-	
+
 	private Global mGlobal;
 
 	// --- -- After Edittest : 아래의 값들은 추후 DB에서 읽어서 setPreviewSize에 넣어야 한다. 현재는
@@ -115,10 +115,10 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private void init(Context context) {
 		Log.e(TAG, "init!!");
 		this.setWillNotDraw(false);
-		
+
 		mGlobal = (Global) context.getApplicationContext();
 		savePath = mGlobal.getPhotoPath();
-		
+
 		int myDevice = Util.getMyDevice();
 
 		if (myDevice == Util.DEVICE_GALAXY_S4)
@@ -292,7 +292,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 		int totalDelay = 0;
 		for (; shotCount > 0; shotCount--) {
-			//mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
+			// mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
 
 			if (mShotMode.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {
 				shutterHandler.sendEmptyMessageDelayed(0, totalDelay);
@@ -317,7 +317,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	PictureCallback jpegCallback = new PictureCallback() {
 		public void onPictureTaken(final byte[] data, Camera camera) {
 			Log.e(TAG, "onPictureTaken");
-			
+
 			mCamera.stopPreview();
 			setPreviewRestart();
 
@@ -343,28 +343,42 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 						// Write to SD Card
 						mCurrentTime = System.currentTimeMillis();
-						
-//						String fileName = String.format(savePath + "/%d.jpg", mCurrentTime);
+
+						// String fileName = String.format(savePath + "/%d.jpg",
+						// mCurrentTime);
 						String fileName = Long.toString(mCurrentTime);
-						String filePath = String.format(savePath + "%s.jpg", mCurrentTime);
-						
+						String filePath = String.format(savePath + "%s.jpg",
+								mCurrentTime);
+
 						outStream = new FileOutputStream(filePath);
 						outStream.write(data);
 						outStream.close();
 						Log.d(TAG, "onPictureTaken - wrote bytes: "
 								+ data.length);
-						if (mShotMode.matches(SettingDefine.SHOT_MODE_SOUND_SHOT)) {
+						if (mShotMode.matches(SettingDefine.SHOT_MODE_NORMAL)) {
+							startShotView(SettingDefine.SHOT_MODE_NORMAL,
+									fileName);
+
+						} else if (mShotMode
+								.matches(SettingDefine.SHOT_MODE_SELF_SHOT)) {
+							startShotView(SettingDefine.SHOT_MODE_SELF_SHOT,
+									fileName);
+
+						} else if (mShotMode
+								.matches(SettingDefine.SHOT_MODE_SOUND_SHOT)) {
 							ACVoicePlayer.GetInstance().StopRec();
 							startRecoderHandler.sendEmptyMessage(0);
-						} else if(mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT) || mShotMode.matches(SettingDefine.SHOT_MODE_NORMAL)){
-							startShotView(SettingDefine.SHOT_MODE_NORMAL, fileName);
+
 						} else if (mShotMode
 								.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {
 							mBestShotSavedCount++;
-							Log.e(TAG, "mBestShotSavedCount = " + mBestShotSavedCount);
+							Log.e(TAG, "mBestShotSavedCount = "
+									+ mBestShotSavedCount);
 							if (mBestShotSavedCount >= MAX_BEST_PHOTO_COUNT) {
 								mBestShotSavedCount = 0;
-								// mShotViewHandler.handleMessage.......
+								startShotView(
+										SettingDefine.SHOT_MODE_BEST_PHOTO,
+										fileName);
 							}
 						}
 
@@ -411,19 +425,19 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 
 	private Handler stopRecoderHandler = new Handler() {
 		public void handleMessage(Message msg) {
-			String fileName = String.format(savePath + "/%d.mp4", mCurrentTime);
+			String fileName = Long.toString(mCurrentTime);
 			ACVoicePlayer.GetInstance().StopRec();
 
-			// mShotViewHandler.handleMessage.......
+			startShotView(SettingDefine.SHOT_MODE_SOUND_SHOT, fileName);
 		}
 	};
-	
-	private Handler shutterHandler = new Handler(){
+
+	private Handler shutterHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
 		}
 	};
-	
+
 	Handler mShotViewHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			Intent intent = new Intent(mContext, PhotoViewActivity.class);
@@ -431,8 +445,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			mContext.startActivity(intent);
 		};
 	};
-	
-	public void startShotView(String shot_mode, String photo_name){
+
+	public void startShotView(String shot_mode, String photo_name) {
 		Message msg = new Message();
 		Bundle b = new Bundle();
 		b.putString(PhotoViewActivity.PHOTO_PATH, photo_name);

@@ -430,4 +430,8 @@ public class Util {
 		}
 		return bitmap;
 	}
+	
+	public static String getDummyBestPhotoApi (String[] fileName){
+		return fileName[7];
+	}
 }

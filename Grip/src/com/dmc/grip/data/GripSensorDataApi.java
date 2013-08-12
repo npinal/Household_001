@@ -48,12 +48,10 @@ public class GripSensorDataApi {
 		if (grip == null)
 			return true;
 
-		// Log.e(TAG, "old = " + mOldGripSensorData.mHand + "new = " +
-		// grip.mHand);
-
 		if (getSensorDriveStatus() == HandStatus.HAND_STATUS_GRIP_PUSH) {
 			if (grip.mHand != mFirstHand) {
 				result = false;
+				return result;
 			}
 
 			for (int i = 0; i < mGripSensorData.mValue.length; i++) {
@@ -63,10 +61,14 @@ public class GripSensorDataApi {
 			}
 		}
 
-		Log.e(TAG, "wrongCount = " + wrongCountNum);
+		if (Define.FEATURE_POWER_MODE != Define.FEATURE_POWER_MODE_POWER_ALL) {
 
-		if (wrongCountNum > maxCount) {
-			result = false;
+			Log.e(TAG, "wrongCount = " + wrongCountNum);
+
+			if (wrongCountNum > maxCount) {
+				result = false;
+			}
+
 		}
 
 		return result;
@@ -80,16 +82,15 @@ public class GripSensorDataApi {
 
 		switch (hand) {
 		case Define.HAND_LEFT:
-			if (power == Define.POWER_FULL) {
-				result = true;
-			} else
-				result = false;
-			break;
 		case Define.HAND_RIGHT:
-			if (power == Define.POWER_FULL) {
+			if (Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_ALL) {
 				result = true;
-			} else
-				result = false;
+			} else {
+				if (power == Define.POWER_FULL) {
+					result = true;
+				} else
+					result = false;
+			}
 			break;
 		case Define.HAND_NO:
 			result = false;
@@ -152,6 +153,11 @@ public class GripSensorDataApi {
 		mGripSensorData.mPower = grip[0] & Define.MASK_BIT_POWER;
 		// PrintUtils.printBit("power", mGripSensorData.mPower);
 
+		if (Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_ALL) {
+			if (mGripSensorData.mPower == 0x00)
+				mGripSensorData.mPower = 0x20;
+		}
+
 		if (firstTouch != 0) {
 			mGripSensorData.mResult = getCheckChangedFinger(
 					Define.WRONG_MAX_COUNT, mGripSensorData);
@@ -165,7 +171,7 @@ public class GripSensorDataApi {
 		if (firstTouch == 0
 				&& (getSensorDriveStatus() == HandStatus.HAND_STATUS_GRIP_PUSH)) {
 			Log.e(TAG, "FirstTouched!!!");
-			
+
 			// --- 최초 인식된 hand값 저장
 			mFirstHand = mGripSensorData.mHand;
 

@@ -65,6 +65,7 @@ public class GripActivity extends Activity {
 
 	String mSaveSettingString = "";
 	String mSaveSettingPath;
+	String mSaveTempPath = Define.SETTING_QUICK_TEMP;
 	
 	String mPatternSavePath;
 
@@ -222,17 +223,17 @@ public class GripActivity extends Activity {
 		mFailFlag = false;
 	}
 
-	private Boolean SettingFileSave() {
+	private Boolean SettingFileSave(String save_path) {
 		FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
 
-		File file = new File(mSaveSettingPath);
+		File file = new File(save_path);
 		CustomLog.d(LOG_TAG, "mSaveSettingString : " + mSaveSettingString);
 		FileUtils.deleteFile(file);
 
 		return FileUtils.writeFile(file, mSaveSettingString.getBytes());
 	}
 	
-	private Boolean PatternFileSave() {
+	private Boolean PatternFileSave(String setting_path) {
 		String accrue = "";
 		int token = 1;
 		int beforePower = -1;
@@ -240,7 +241,7 @@ public class GripActivity extends Activity {
 		int time = 0;
 		int all_token = 0;
 		
-		File file = new File(mSaveSettingPath);
+		File file = new File(setting_path);
 		if (file != null && file.exists()) {
 			try {
 				FileInputStream fis = new FileInputStream(file);
@@ -255,6 +256,12 @@ public class GripActivity extends Activity {
 					
 					int power = Integer.parseInt(parse[1]);
 					int hand = Integer.parseInt(parse[2]);
+					
+					if(Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_ALL){
+						if(power == Define.POWER_MIDDLE && hand != Define.HAND_NO && hand != Define.HAND_IMPOSSIBLE){
+							power = Define.POWER_FULL;
+						}
+					}
 
 					if(accrue.equals("") && power == Define.POWER_FULL && hand != Define.HAND_NO && hand != Define.HAND_IMPOSSIBLE){
 						accrue = accrue + parse[0];
@@ -296,30 +303,34 @@ public class GripActivity extends Activity {
 				}
 				fis.close();
 				
-				if(time > 0){
-					if(token == 0){
-						token = token + 1;
+				if(accrue.equals("") == false){
+					if(time > 0){
+						if(token == 0){
+							token = token + 1;
+						}
+						accrue = accrue + Define.FILE_SEPARATOR;
+						accrue = accrue + beforePower;
+						accrue = accrue + Define.FILE_SEPARATOR;
+						accrue = accrue + token;
+						
+						all_token = all_token + token;
 					}
-					accrue = accrue + Define.FILE_SEPARATOR;
-					accrue = accrue + beforePower;
-					accrue = accrue + Define.FILE_SEPARATOR;
-					accrue = accrue + token;
 					
-					all_token = all_token + token;
+					accrue = accrue + Define.FILE_SEPARATOR;
+					accrue = accrue + all_token;
+					
+					CustomLog.d(LOG_TAG, "PatternFileSave : " + accrue);
+					
+					FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
+
+					File saveFile = new File(mPatternSavePath);
+					FileUtils.deleteFile(saveFile);
+
+					return FileUtils.writeFile(saveFile, accrue.getBytes());
 				}
-				
-				accrue = accrue + Define.FILE_SEPARATOR;
-				accrue = accrue + all_token;
-				
-				CustomLog.d(LOG_TAG, "PatternFileSave : " + accrue);
-				
-				FileUtils.makeDirectory(Define.SETTING_SAVE_PATH);
-
-				File saveFile = new File(mPatternSavePath);
-				FileUtils.deleteFile(saveFile);
-
-				return FileUtils.writeFile(saveFile, accrue.getBytes());
-				
+				else{
+					
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -569,12 +580,22 @@ public class GripActivity extends Activity {
 			if (v.getId() == R.id.grip_regist_ok) {
 				failDialogHandler.removeMessages(GRIP_FAIL);
 				failDialogHandler.removeMessages(GRIP_TIMEOUT);
-				mFailFlag = false;
 				
-				SettingFileSave();
-				PatternFileSave();
+				SettingFileSave(mSaveTempPath);
+				Boolean pattern_result = PatternFileSave(mSaveTempPath);
 				
-				mRegistOkDialog.show();
+				if(pattern_result == true){
+					mFailFlag = false;
+					SettingFileSave(mSaveSettingPath);
+					mRegistOkDialog.show();
+				}
+				else{
+					File file = new File(mSaveTempPath);
+					FileUtils.deleteFile(file);
+					mFailFlag = true;
+					failDialogHandler.sendEmptyMessage(GRIP_FAIL);
+				}
+				
 			}
 		}
 	};
@@ -582,10 +603,10 @@ public class GripActivity extends Activity {
 	private Handler dialogHandler = new Handler() {
 		public void handleMessage(Message msg) {
 
-			if (msg.what < 5) {
+			if (msg.what < 3) {
 				mRegistStartDialog.setMessage(getBaseContext().getResources()
 						.getString(R.string.setting_grip_register_message)
-						+ (5 - msg.what));
+						+ (3 - msg.what));
 				dialogHandler.sendEmptyMessageDelayed(msg.what + 1, 1000);
 			} else {
 				mRegistStartDialog.dismiss();

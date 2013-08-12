@@ -14,6 +14,7 @@ public class Define {
 	public static final String SETTING_QUICK_LOCK = SETTING_SAVE_PATH + "quick_lock.txt";
 	public static final String SETTING_QUICK_CAMERA = SETTING_SAVE_PATH + "quick_camera.txt";
 	public static final String SETTING_QUICK_EBOOK = SETTING_SAVE_PATH + "quick_ebook.txt";
+	public static final String SETTING_QUICK_TEMP = SETTING_SAVE_PATH + "quick_temp.txt";
 	
 	public static final String PATTERN_QUICK_LOCK = SETTING_SAVE_PATH + "quick_lock_pattern.txt"; 	
 	public static final String PATTERN_QUICK_CAMERA = SETTING_SAVE_PATH + "quick_camera_pattern.txt"; 	

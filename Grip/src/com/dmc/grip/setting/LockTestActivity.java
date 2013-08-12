@@ -14,6 +14,7 @@ import com.dmc.grip.R;
 import com.dmc.grip.data.OnSensorDataListner;
 import com.dmc.grip.data.PatternData;
 import com.dmc.grip.data.SensorDataEvent;
+import com.dmc.grip.provider.DBApi;
 import com.dmc.grip.sensor.GripSensorEventManager;
 import com.dmc.grip.type.Define;
 import com.dmc.grip.utils.CustomLog;
@@ -75,7 +76,19 @@ public class LockTestActivity extends Activity {
 			}
 			else{
 				if(mInputData.equals("")){
-					if(sensorData.mPower == Define.POWER_FULL){
+					Boolean mPowerResult = false;
+					if(Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_ALL){
+						if(sensorData.mPower == Define.POWER_MIDDLE && sensorData.mHand != Define.HAND_NO && sensorData.mHand != Define.HAND_IMPOSSIBLE){
+							mPowerResult = true;
+						}
+					}
+					else if(Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_FULL){
+						if(sensorData.mPower == Define.POWER_FULL){
+							mPowerResult = true;
+						}
+					}
+					
+					if(mPowerResult){
 						Boolean compareResult = false;
 						for (int i=0; i < mPatternData.length; i++){
 							if(mPatternData[i] != null){
@@ -103,7 +116,22 @@ public class LockTestActivity extends Activity {
 					}
 				}
 				else{
-					int power = sensorData.mPower;
+					
+					int power = 0;
+					if(Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_ALL){
+						if(sensorData.mPower == Define.POWER_MIDDLE && sensorData.mHand != Define.HAND_NO && sensorData.mHand != Define.HAND_IMPOSSIBLE){
+							power = Define.POWER_FULL;
+						}
+					}
+					else if(Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_FULL){
+						if(sensorData.mPower == Define.POWER_FULL){
+							power = sensorData.mPower;
+						}
+					}
+					else{
+						power = sensorData.mPower;
+					}
+					
 					
 					mTime = mTime + Define.GRIP_SETTING_THRESHOLD;
 					if(mBeforePower == -1){
@@ -225,9 +253,19 @@ public class LockTestActivity extends Activity {
 		File camera_data = new File(Define.PATTERN_QUICK_CAMERA);
 		File ebook_data = new File(Define.PATTERN_QUICK_EBOOK);
 		
-		settingData[0] = FileUtils.readFile(lock_data);
-		settingData[1] = FileUtils.readFile(camera_data);
-		settingData[2] = FileUtils.readFile(ebook_data);
+		if(DBApi.TblSystem.getBoolean(getContentResolver(), DBApi.TblSystem.QUICK_RUN, false) == true){
+			if(DBApi.TblSystem.getBoolean(getContentResolver(), DBApi.TblSystem.QUICK_RUN_LOCK, false) == true){
+				settingData[0] = FileUtils.readFile(lock_data);
+			}
+			
+			if(DBApi.TblSystem.getBoolean(getContentResolver(), DBApi.TblSystem.QUICK_RUN_CAMERA, false) == true){
+				settingData[1] = FileUtils.readFile(camera_data);
+			}
+			
+			if(DBApi.TblSystem.getBoolean(getContentResolver(), DBApi.TblSystem.QUICK_RUN_EBOOK, false) == true){
+				settingData[2] = FileUtils.readFile(ebook_data);
+			}
+		}
 		
 		CustomLog.d(LOG_TAG, "init lock_data : " + settingData[0]);
 		CustomLog.d(LOG_TAG, "init camera_data : " + settingData[1]);

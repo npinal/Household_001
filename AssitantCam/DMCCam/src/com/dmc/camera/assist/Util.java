@@ -75,6 +75,7 @@ public class Util {
 
 	
 	public final static int PREVIEW_LEFT_MARGIN	= 240;
+	public final static int BEST_PHOTO_SHOT_DELAY = 1500;	//---	1.5 Sec
 	
 	private Util(){	
 	}

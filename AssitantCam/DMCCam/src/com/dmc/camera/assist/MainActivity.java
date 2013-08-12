@@ -31,6 +31,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TestCameraApi mTestCameraApi = null;
 	static Context context;
 	private static String mShotMode; 
+	private static String mResolutionType;
+	private static String mFlashType;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,10 @@ public class MainActivity extends Activity implements OnClickListener {
 		//	Read the Shot Mode from DB
 		mShotMode = DBApi.TblSystem.getString(context.getContentResolver(),
 				DBApi.TblSystem.SHOT_MODE);
+		mResolutionType = DBApi.TblSystem.getString(context.getContentResolver(),
+				DBApi.TblSystem.RESOLUTION);
+		mFlashType = DBApi.TblSystem.getString(context.getContentResolver(),
+				DBApi.TblSystem.FLASH);
 
 		LayoutInflater inflater = getLayoutInflater();
 		View buttonView = (View) inflater.inflate(R.layout.activity_main, null);
@@ -144,6 +150,18 @@ public class MainActivity extends Activity implements OnClickListener {
 				
 				@Override
 				public void onDismissed() {
+					String resolutionType = DBApi.TblSystem.getString(context.getContentResolver(),
+							DBApi.TblSystem.RESOLUTION);
+					String flashType = DBApi.TblSystem.getString(context.getContentResolver(),
+							DBApi.TblSystem.FLASH);
+					
+					if (mResolutionType != resolutionType){
+					//---	해상도 재설정 
+					}
+					
+					if (mFlashType != flashType){
+						mCameraSettings.setCameraFlashMode(mFlashType);
+					}
 					
 				}
 			});

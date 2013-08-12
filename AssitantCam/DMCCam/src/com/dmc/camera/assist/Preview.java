@@ -49,6 +49,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private int TEMP_GALAXY_NOTE_2_PREVIEW_WIDTH = 3264;
 	private int TEMP_GALAXY_NOTE_2_PREVIEW_HEIGHT = 2448;
 
+	private int MAX_BEST_PHOTO_COUNT = 8;
+
 	private FaceDetector mFaceDetector;
 	private FocusManager mFocusManager;
 	private ZoomControl mZoomControl;
@@ -69,7 +71,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	private String mShotMode;
 
 	// --- 입시파일이름 (차후 삭제바람)
-	long mCurrentTime;
+	private long mCurrentTime;
+	private int mBestShotSavedCount = 0;
 
 	public Preview(Context context) {
 		super(context);
@@ -237,7 +240,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 		Log.e(TAG, "mShotMode = " + mShotMode);
 
 		if (mShotMode.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {
-			shotCount = 8;
+			shotCount = MAX_BEST_PHOTO_COUNT;
 		}
 
 		if (mCamera != null)
@@ -250,7 +253,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 				parameters.setRotation(270);
 				break;
 			case Util.ORIENTATION_COMPENSATAION_HORIZONTAL:
-				parameters.setRotation(180);				
+				parameters.setRotation(180);
 				break;
 			case Util.ORIENTATION_COMPENSATAION_L_VERTICAL:
 				parameters.setRotation(90);
@@ -280,31 +283,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 		mCamera.setParameters(parameters);
-		/*
-		 * if (orientation == Util.ORIENTATION_COMPENSATAION_VERTICAL) { if
-		 * (mShotMode.matches(SettingDefine.SHOT_MODE_SELF_SHOT)) {
-		 * Camera.Parameters parameters = mCamera.getParameters();
-		 * parameters.setRotation(270); mCamera.setParameters(parameters); }
-		 * else { Camera.Parameters parameters = mCamera.getParameters();
-		 * parameters.setRotation(90); mCamera.setParameters(parameters); }
-		 * Log.e(TAG, "Capture Vertical"); } else { Camera.Parameters parameters
-		 * = mCamera.getParameters(); parameters.setRotation(0);
-		 * mCamera.setParameters(parameters); Log.e(TAG, "Capture Horizontal");
-		 * }
-		 */
 
+		int totalDelay = 0;
 		for (; shotCount > 0; shotCount--) {
-			mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
+			//mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
 
 			if (mShotMode.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {
-				// --- Minimum burst shot time delay : 500mSec 이하로 설정되면
-				// native_capture()에서 crash 발
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				shutterHandler.sendEmptyMessageDelayed(0, totalDelay);
+				totalDelay = totalDelay + Util.BEST_PHOTO_SHOT_DELAY;
+			} else {
+				shutterHandler.sendEmptyMessage(0);
 			}
 		}
 	}
@@ -322,6 +310,8 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	@SuppressLint("DefaultLocale")
 	PictureCallback jpegCallback = new PictureCallback() {
 		public void onPictureTaken(final byte[] data, Camera camera) {
+			Log.e(TAG, "onPictureTaken");
+			
 			mCamera.stopPreview();
 			setPreviewRestart();
 
@@ -344,6 +334,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 						if (!file.isDirectory()) {
 							file.mkdir();
 						}
+
 						// Write to SD Card
 						mCurrentTime = System.currentTimeMillis();
 						String fileName = String.format(savePath + "/%d.jpg",
@@ -357,7 +348,17 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 								.matches(SettingDefine.SHOT_MODE_SOUND_SHOT)) {
 							ACVoicePlayer.GetInstance().StopRec();
 							startRecoderHandler.sendEmptyMessage(0);
-						} else {
+						} else if (mShotMode
+								.matches(SettingDefine.SHOT_MODE_BEST_PHOTO)) {
+							mBestShotSavedCount++;
+							Log.e(TAG, "mBestShotSavedCount = " + mBestShotSavedCount);
+							if (mBestShotSavedCount >= MAX_BEST_PHOTO_COUNT) {
+								mBestShotSavedCount = 0;
+								// mShotViewHandler.handleMessage.......
+							}
+						} else if ((mShotMode
+								.matches(SettingDefine.SHOT_MODE_NORMAL) || (mShotMode
+								.matches(SettingDefine.SHOT_MODE_SELF_SHOT)))) {
 							Message msg = new Message();
 							Bundle b = new Bundle();
 							b.putString(PhotoViewActivity.PHOTO_PATH, fileName);
@@ -413,9 +414,22 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			String fileName = String.format(savePath + "/%d.mp4", mCurrentTime);
 			ACVoicePlayer.GetInstance().StopRec();
 
-			// --- test by hkkwon
-			// ACVoicePlayer.GetInstance().PlayRec(fileName);
+			// mShotViewHandler.handleMessage.......
 		}
+	};
+	
+	private Handler shutterHandler = new Handler(){
+		public void handleMessage(Message msg) {
+			mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
+		}
+	};
+	
+	Handler mShotViewHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			Intent intent = new Intent(mContext, PhotoViewActivity.class);
+			intent.putExtras(msg.getData());
+			mContext.startActivity(intent);
+		};
 	};
 
 	@Override
@@ -502,12 +516,6 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	 * paint.setStrokeWidth(3); canvas.drawLine(0, 110, 200, 110,paint); }
 	 */
 
-	Handler mShotViewHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			Intent intent = new Intent(mContext, PhotoViewActivity.class);
-			intent.putExtras(msg.getData());
-			mContext.startActivity(intent);
-		};
-	};
+
 
 }

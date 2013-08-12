@@ -5,6 +5,10 @@ import android.os.Environment;
 public class Define {
 	public static Boolean DEBUG = true;
 	
+	public static int FEATURE_POWER_MODE_POWER_FULL = 0x01; 	// POWER_PULL 
+	public static int FEATURE_POWER_MODE_POWER_ALL = 0x02; 	// POWER_MIDDLE + POWER_PULL
+	public static int FEATURE_POWER_MODE = FEATURE_POWER_MODE_POWER_ALL; 	// 0 : POWER_FULL / 1 : POWER_MIDDLE + POWER_FULL 
+	
 	public static final String SETTING_SAVE_PATH = Environment.getExternalStorageDirectory() + "/Grip_Pattern/";
 	
 	public static final String SETTING_QUICK_LOCK = SETTING_SAVE_PATH + "quick_lock.txt";

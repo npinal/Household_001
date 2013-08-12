@@ -431,6 +431,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 			mContext.startActivity(intent);
 		};
 	};
+	
+	public void startShotView(String shot_mode, String photo_name){
+		Message msg = new Message();
+		Bundle b = new Bundle();
+		b.putString(PhotoViewActivity.PHOTO_PATH, photo_name);
+		b.putInt(PhotoViewActivity.VIEW_MODE,
+				PhotoViewActivity.PHOTO_VIEW_MODE_SHOT);
+		msg.setData(b);
+		mShotViewHandler.handleMessage(msg);
+	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -515,23 +525,4 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback {
 	 * new Paint(Paint.ANTI_ALIAS_FLAG);; paint.setColor(Color.GREEN);
 	 * paint.setStrokeWidth(3); canvas.drawLine(0, 110, 200, 110,paint); }
 	 */
-
-	public void startShotView(String shot_mode, String photo_name){
-		Message msg = new Message();
-		Bundle b = new Bundle();
-		b.putString(PhotoViewActivity.PHOTO_PATH, photo_name);
-		b.putInt(PhotoViewActivity.VIEW_MODE,
-				PhotoViewActivity.PHOTO_VIEW_MODE_SHOT);
-		msg.setData(b);
-		mShotViewHandler.handleMessage(msg);
-	}
-	
-	Handler mShotViewHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			Intent intent = new Intent(mContext, PhotoViewActivity.class);
-			intent.putExtras(msg.getData());
-			mContext.startActivity(intent);
-		};
-	};
-
 }

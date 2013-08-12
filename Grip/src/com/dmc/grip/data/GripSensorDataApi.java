@@ -153,10 +153,13 @@ public class GripSensorDataApi {
 		mGripSensorData.mPower = grip[0] & Define.MASK_BIT_POWER;
 		// PrintUtils.printBit("power", mGripSensorData.mPower);
 
+		//---	test by hkkwon
+		/*
 		if (Define.FEATURE_POWER_MODE == Define.FEATURE_POWER_MODE_POWER_ALL) {
 			if (mGripSensorData.mPower == 0x00)
 				mGripSensorData.mPower = 0x20;
 		}
+		*/
 
 		if (firstTouch != 0) {
 			mGripSensorData.mResult = getCheckChangedFinger(
